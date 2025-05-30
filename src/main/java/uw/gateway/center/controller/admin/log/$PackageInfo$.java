@@ -1,0 +1,21 @@
+package uw.gateway.center.controller.admin.log;
+
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import uw.auth.service.annotation.MscPermDeclare;
+import uw.auth.service.constant.UserType;
+
+/**
+ * 主要是提供注解支持用。
+ */
+@RestController
+public class $PackageInfo$ {
+
+    @GetMapping("/admin/log")
+    @Operation(summary = "鉴权日志", description = "鉴权日志")
+    @MscPermDeclare(user = UserType.ADMIN)
+    public void info() {
+    }
+
+}

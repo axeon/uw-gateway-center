@@ -1,0 +1,669 @@
+{
+  "groups": [
+    {
+      "name": "uw.gateway.center",
+      "type": "uw.gateway.center.conf.AuthCenterProperties",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties"
+    },
+    {
+      "name": "uw.gateway.center.key-redis",
+      "type": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties",
+      "sourceMethod": "getKeyRedis()"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.cluster",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Cluster",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceMethod": "getCluster()"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.jedis",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Jedis",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceMethod": "getJedis()"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.jedis.pool",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Jedis",
+      "sourceMethod": "getPool()"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceMethod": "getLettuce()"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce.cluster",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce",
+      "sourceMethod": "getCluster()"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce.cluster.refresh",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster$Refresh",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster",
+      "sourceMethod": "getRefresh()"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce.pool",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce",
+      "sourceMethod": "getPool()"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.sentinel",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceMethod": "getSentinel()"
+    },
+    {
+      "name": "uw.gateway.center.login-redis",
+      "type": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties",
+      "sourceMethod": "getLoginRedis()"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.cluster",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Cluster",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceMethod": "getCluster()"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.jedis",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Jedis",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceMethod": "getJedis()"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.jedis.pool",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Jedis",
+      "sourceMethod": "getPool()"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceMethod": "getLettuce()"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce.cluster",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce",
+      "sourceMethod": "getCluster()"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce.cluster.refresh",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster$Refresh",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster",
+      "sourceMethod": "getRefresh()"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce.pool",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce",
+      "sourceMethod": "getPool()"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.sentinel",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceMethod": "getSentinel()"
+    },
+    {
+      "name": "uw.gateway.center.token-redis",
+      "type": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties",
+      "sourceMethod": "getTokenRedis()"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.cluster",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Cluster",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceMethod": "getCluster()"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.jedis",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Jedis",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceMethod": "getJedis()"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.jedis.pool",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Jedis",
+      "sourceMethod": "getPool()"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceMethod": "getLettuce()"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce.cluster",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce",
+      "sourceMethod": "getCluster()"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce.cluster.refresh",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster$Refresh",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster",
+      "sourceMethod": "getRefresh()"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce.pool",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce",
+      "sourceMethod": "getPool()"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.sentinel",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties",
+      "sourceMethod": "getSentinel()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "uw.gateway.center.key-redis.client-name",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.client-type",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$ClientType",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.cluster.max-redirects",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Cluster"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.cluster.nodes",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Cluster"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.connect-timeout",
+      "type": "java.time.Duration",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.database",
+      "type": "java.lang.Integer",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.host",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.jedis.pool.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.jedis.pool.max-active",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.jedis.pool.max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.jedis.pool.max-wait",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.jedis.pool.min-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.jedis.pool.time-between-eviction-runs",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce.cluster.refresh.adaptive",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster$Refresh"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce.cluster.refresh.dynamic-refresh-sources",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster$Refresh"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce.cluster.refresh.period",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster$Refresh"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce.pool.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce.pool.max-active",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce.pool.max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce.pool.max-wait",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce.pool.min-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce.pool.time-between-eviction-runs",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.lettuce.shutdown-timeout",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.password",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.port",
+      "type": "java.lang.Integer",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.sentinel.master",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.sentinel.nodes",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.sentinel.password",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.sentinel.username",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.ssl",
+      "type": "java.lang.Boolean",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.timeout",
+      "type": "java.time.Duration",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.url",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.key-redis.username",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.client-name",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.client-type",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$ClientType",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.cluster.max-redirects",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Cluster"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.cluster.nodes",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Cluster"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.connect-timeout",
+      "type": "java.time.Duration",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.database",
+      "type": "java.lang.Integer",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.host",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.jedis.pool.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.jedis.pool.max-active",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.jedis.pool.max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.jedis.pool.max-wait",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.jedis.pool.min-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.jedis.pool.time-between-eviction-runs",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce.cluster.refresh.adaptive",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster$Refresh"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce.cluster.refresh.dynamic-refresh-sources",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster$Refresh"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce.cluster.refresh.period",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster$Refresh"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce.pool.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce.pool.max-active",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce.pool.max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce.pool.max-wait",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce.pool.min-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce.pool.time-between-eviction-runs",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.lettuce.shutdown-timeout",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.password",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.port",
+      "type": "java.lang.Integer",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.sentinel.master",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.sentinel.nodes",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.sentinel.password",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.sentinel.username",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.ssl",
+      "type": "java.lang.Boolean",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.timeout",
+      "type": "java.time.Duration",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.url",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.login-redis.username",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.client-name",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.client-type",
+      "type": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$ClientType",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.cluster.max-redirects",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Cluster"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.cluster.nodes",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Cluster"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.connect-timeout",
+      "type": "java.time.Duration",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.database",
+      "type": "java.lang.Integer",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.host",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.jedis.pool.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.jedis.pool.max-active",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.jedis.pool.max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.jedis.pool.max-wait",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.jedis.pool.min-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.jedis.pool.time-between-eviction-runs",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce.cluster.refresh.adaptive",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster$Refresh"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce.cluster.refresh.dynamic-refresh-sources",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster$Refresh"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce.cluster.refresh.period",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce$Cluster$Refresh"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce.pool.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce.pool.max-active",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce.pool.max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce.pool.max-wait",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce.pool.min-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce.pool.time-between-eviction-runs",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Pool"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.lettuce.shutdown-timeout",
+      "type": "java.time.Duration",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Lettuce"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.password",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.port",
+      "type": "java.lang.Integer",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.sentinel.master",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.sentinel.nodes",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.sentinel.password",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.sentinel.username",
+      "type": "java.lang.String",
+      "sourceType": "org.springframework.boot.autoconfigure.data.redis.RedisProperties$Sentinel"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.ssl",
+      "type": "java.lang.Boolean",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.timeout",
+      "type": "java.time.Duration",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.url",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    },
+    {
+      "name": "uw.gateway.center.token-redis.username",
+      "type": "java.lang.String",
+      "sourceType": "uw.gateway.center.conf.AuthCenterProperties$RedisProperties"
+    }
+  ],
+  "hints": []
+}
