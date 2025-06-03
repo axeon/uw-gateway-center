@@ -60,7 +60,7 @@ public class MscAclHelper {
         FusionCache.config( new FusionCache.Config( MSC_ACL_FILTER, 10000, 86400_000L ), new CacheDataLoader<Long, List<MscAclFilterInfo>>() {
             @Override
             public List<MscAclFilterInfo> load(Long saasId) throws Exception {
-                URI targetUrl = UriComponentsBuilder.fromHttpUrl( authClientProperties.getAuthCenterHost() ).path( "/rpc/gateway/getAclFilterList" ).queryParam( "saasId",
+                URI targetUrl = UriComponentsBuilder.fromUriString( authClientProperties.getAuthCenterHost() ).path( "/rpc/gateway/getAclFilterList" ).queryParam( "saasId",
                         saasId ).build().encode().toUri();
                 CompletableFuture<List<MscAclFilterInfo>> future = CompletableFuture.supplyAsync( () -> authRestTemplate.exchange( targetUrl, HttpMethod.GET, HttpEntity.EMPTY,
                         new ParameterizedTypeReference<List<MscAclFilterInfo>>() {
@@ -79,7 +79,7 @@ public class MscAclHelper {
             @Override
             public List<MscAclRateInfo> load(Long saasId) throws Exception {
                 URI targetUrl =
-                        UriComponentsBuilder.fromHttpUrl( authClientProperties.getAuthCenterHost() ).path( "/rpc/gateway/getAclRateList" ).queryParam( "saasId", saasId ).build().encode().toUri();
+                        UriComponentsBuilder.fromUriString( authClientProperties.getAuthCenterHost() ).path( "/rpc/gateway/getAclRateList" ).queryParam( "saasId", saasId ).build().encode().toUri();
                 CompletableFuture<List<MscAclRateInfo>> future = CompletableFuture.supplyAsync( () -> authRestTemplate.exchange( targetUrl, HttpMethod.GET, HttpEntity.EMPTY,
                         new ParameterizedTypeReference<List<MscAclRateInfo>>() {
                 } ).getBody() );
