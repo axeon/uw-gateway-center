@@ -54,7 +54,7 @@ public class AccessLogStatsHelper {
                  "range": {
                   "@timestamp": {
                     "gte": "%s",
-                    "lte": "%s",
+                    "lte": "%s"
                    }
                  }
                },
@@ -132,7 +132,7 @@ public class AccessLogStatsHelper {
                  "range": {
                   "@timestamp": {
                     "gte": "%s",
-                    "lte": "%s",
+                    "lte": "%s"
                    }
                  }
                },
@@ -207,7 +207,7 @@ public class AccessLogStatsHelper {
                 "range": {
                   "@timestamp": {
                     "gte": "%s",
-                    "lte": "%s",
+                    "lte": "%s"
                   }
                 }
               },
@@ -291,7 +291,7 @@ public class AccessLogStatsHelper {
                 "range": {
                   "@timestamp": {
                     "gte": "%s",
-                    "lte": "%s",
+                    "lte": "%s"
                   }
                 }
               },
@@ -312,7 +312,7 @@ public class AccessLogStatsHelper {
                     "range": {
                       "@timestamp": {
                         "gte": "%s",
-                        "lte": "%s",
+                        "lte": "%s"
                       }
                     }
                   },
@@ -640,14 +640,14 @@ public class AccessLogStatsHelper {
     }
 
 
-    public static void main(String[] args) {
-        AccessLogStatsHelper.esConfig = new GatewayCenterProperties.EsConfig();
-        AccessLogStatsHelper.esConfig.setServer("http://192.168.88.21:9200");
-        AccessLogStatsHelper.esConfig.setUsername("elastic");
-        AccessLogStatsHelper.esConfig.setPassword("espasswd");
-        Date now = new Date();
-        Date startDate = DateUtils.beginOfMonth(now);
-        Date endDate = DateUtils.endOfYesterday(now);
+//    public static void main(String[] args) {
+//        AccessLogStatsHelper.esConfig = new GatewayCenterProperties.EsConfig();
+//        AccessLogStatsHelper.esConfig.setServer("http://192.168.88.21:9200");
+//        AccessLogStatsHelper.esConfig.setUsername("elastic");
+//        AccessLogStatsHelper.esConfig.setPassword("espasswd");
+//        Date now = new Date();
+//        Date startDate = DateUtils.beginOfMonth(now);
+//        Date endDate = DateUtils.endOfYesterday(now);
 //        var globalStats = AccessLogStatsHelper.globalStats(startDate, endDate);
 //        System.out.println(globalStats);
 //        var saasStats = AccessLogStatsHelper.saasStats(startDate, endDate);
@@ -673,9 +673,9 @@ public class AccessLogStatsHelper {
 //        topParamList.add(new AccessLogStatsHelper.TopParam("topCode", "responseCode", "_count", 100, 10));
 //        var topDataMap = AccessLogStatsHelper.globalTopData(startDate, now, topParamList);
 //        System.out.println(topDataMap);
-        var codeData = AccessLogStatsHelper.globalCodeData(startDate, endDate);
-        System.out.println(codeData);
-    }
+//        var codeData = AccessLogStatsHelper.globalCodeData(startDate, endDate);
+//        System.out.println(codeData);
+//    }
 
 
     /**
