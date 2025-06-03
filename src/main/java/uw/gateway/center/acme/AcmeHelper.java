@@ -14,6 +14,7 @@ import uw.common.app.vo.JsonConfigBox;
 import uw.common.dto.ResponseData;
 import uw.common.util.DateUtils;
 import uw.common.util.JsonUtils;
+import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.gateway.center.acme.deploy.*;
 import uw.gateway.center.acme.dns.*;
@@ -418,7 +419,7 @@ public class AcmeHelper {
         mscAcmeCert.setDomainAlias(acmeDomain.getDomainAlias());
         mscAcmeCert.setCertAlg(acmeDomain.getDomainCertAlg());
         mscAcmeCert.setCertKey(acmeDomain.getDomainCertKey());
-        mscAcmeCert.setCreateDate(new Date());
+        mscAcmeCert.setCreateDate(SystemClock.nowDate());
         mscAcmeCert.setModifyDate(null);
         // 证书写入器
         StringWriter certWriter = new StringWriter();
@@ -564,7 +565,7 @@ public class AcmeHelper {
         mscAcmeDeployLog.setCertId(mscAcmeCert.getId());
         mscAcmeDeployLog.setDeployId(mscAcmeDeploy.getId());
         mscAcmeDeployLog.setState(CommonState.ENABLED.getValue());
-        mscAcmeDeployLog.setDeployDate(new Date());
+        mscAcmeDeployLog.setDeployDate(SystemClock.nowDate());
         //  执行部署。
         ResponseData<String> deployResponse = performDeployCert(mscAcmeDeploy, mscAcmeCert, slog);
         if (deployResponse.isNotSuccess()) {
@@ -599,7 +600,7 @@ public class AcmeHelper {
      * @return
      */
     public static ResponseData<MscAcmeDomain> updateDomainCertInfo(long domainId) {
-        Date now = new Date();
+        Date now = SystemClock.nowDate();
         return getValidCert(domainId, now).onSuccess(mscAcmeCert -> {
             return dao.load(MscAcmeDomain.class, domainId).onSuccess(mscAcmeDomain -> {
                 mscAcmeDomain.setLastUpdate(now);
@@ -662,7 +663,7 @@ public class AcmeHelper {
          * @param message
          */
         public void log(String message) {
-            log.append(DateUtils.dateToString(new Date(), DateUtils.DATE_MILLIS));
+            log.append(DateUtils.dateToString(SystemClock.nowDate(), DateUtils.DATE_MILLIS));
             log.append("\t");
             log.append(message).append("\n");
         }

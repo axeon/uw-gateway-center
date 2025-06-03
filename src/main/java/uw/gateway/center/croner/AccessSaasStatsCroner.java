@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 import uw.common.dto.ResponseData;
 import uw.common.util.DateUtils;
+import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.gateway.center.entity.AccessSaasStats;
 import uw.gateway.center.helper.AccessLogStatsHelper;
@@ -30,7 +31,7 @@ public class AccessSaasStatsCroner extends TaskCroner {
      */
     @Override
     public String runTask(TaskCronerLog taskCronerLog) throws Exception {
-        Date now = new Date();
+        Date now = SystemClock.nowDate();
         Date startDate = DateUtils.beginOfYesterday(now);
         Date endDate = DateUtils.endOfYesterday(now);
         ResponseData<List<AccessSaasStats>> statsResponse = AccessLogStatsHelper.saasStats(startDate, endDate);

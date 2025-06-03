@@ -15,7 +15,6 @@ import uw.common.app.entity.SysDataHistory;
 import uw.common.dto.ResponseData;
 import uw.dao.DaoManager;
 import uw.dao.DataList;
-import uw.dao.PageQueryParam;
 import uw.dao.QueryParam;
 
 

@@ -4,12 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
-import uw.gateway.center.acl.MscAclHelper;
-import uw.gateway.center.constant.AclAuditState;
-import uw.gateway.center.dto.MscAclFilterQueryParam;
-import uw.gateway.center.entity.MscAclFilter;
-import uw.gateway.center.entity.MscAclFilterData;
-import uw.gateway.center.vo.MscAclFilterEx;
 import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
@@ -17,11 +11,17 @@ import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonResponseCode;
 import uw.common.dto.ResponseData;
+import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.dao.DataList;
 import uw.dao.vo.QueryParamResult;
+import uw.gateway.center.acl.MscAclHelper;
+import uw.gateway.center.constant.AclAuditState;
+import uw.gateway.center.dto.MscAclFilterQueryParam;
+import uw.gateway.center.entity.MscAclFilter;
+import uw.gateway.center.entity.MscAclFilterData;
+import uw.gateway.center.vo.MscAclFilterEx;
 
-import java.util.Date;
 import java.util.stream.Collectors;
 
 
@@ -103,7 +103,7 @@ public class MscAclFilterAuditController {
             mscAclFilter.setAuditUserInfo(AuthServiceHelper.getUserName());
             mscAclFilter.setAuditUserIp(AuthServiceHelper.getRemoteIp());
             mscAclFilter.setAuditRemark(remark);
-            mscAclFilter.setAuditDate(new Date());
+            mscAclFilter.setAuditDate(SystemClock.nowDate());
             return dao.update(mscAclFilter).onSuccess(updateResponse -> {
                 //更新缓存
                 MscAclHelper.invalidateAclFilterCache(mscAclFilter.getSaasId());
@@ -133,7 +133,7 @@ public class MscAclFilterAuditController {
             mscAclFilter.setAuditUserInfo(AuthServiceHelper.getUserName());
             mscAclFilter.setAuditUserIp(AuthServiceHelper.getRemoteIp());
             mscAclFilter.setAuditRemark(remark);
-            mscAclFilter.setAuditDate(new Date());
+            mscAclFilter.setAuditDate(SystemClock.nowDate());
             return dao.update(mscAclFilter);
         });
     }
@@ -161,7 +161,7 @@ public class MscAclFilterAuditController {
             mscAclFilterData.setAuditUserInfo(AuthServiceHelper.getUserName());
             mscAclFilterData.setAuditUserIp(AuthServiceHelper.getRemoteIp());
             mscAclFilterData.setAuditRemark(remark);
-            mscAclFilterData.setAuditDate(new Date());
+            mscAclFilterData.setAuditDate(SystemClock.nowDate());
             return dao.update(mscAclFilterData).onSuccess(updateResponse -> {
                 MscAclHelper.invalidateAclFilterCache(mscAclFilterData.getSaasId());
             });
@@ -191,7 +191,7 @@ public class MscAclFilterAuditController {
             mscAclFilterData.setAuditUserInfo(AuthServiceHelper.getUserName());
             mscAclFilterData.setAuditUserIp(AuthServiceHelper.getRemoteIp());
             mscAclFilterData.setAuditRemark(remark);
-            mscAclFilterData.setAuditDate(new Date());
+            mscAclFilterData.setAuditDate(SystemClock.nowDate());
             return dao.update(mscAclFilterData).onSuccess(updateResponse -> {
                 MscAclHelper.invalidateAclFilterCache(mscAclFilterData.getSaasId());
             });

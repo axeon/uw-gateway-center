@@ -19,6 +19,7 @@ import uw.common.app.entity.SysCritLog;
 import uw.common.app.entity.SysDataHistory;
 import uw.common.app.helper.SysDataHistoryHelper;
 import uw.common.dto.ResponseData;
+import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.dao.DataList;
 import uw.gateway.center.acme.AcmeHelper;
@@ -26,8 +27,6 @@ import uw.gateway.center.dto.MscAcmeDeployLogQueryParam;
 import uw.gateway.center.dto.MscAcmeDeployQueryParam;
 import uw.gateway.center.entity.MscAcmeDeploy;
 import uw.gateway.center.entity.MscAcmeDeployLog;
-
-import java.util.Date;
 
 
 /**
@@ -161,7 +160,7 @@ public class MscAcmeDeployController {
         AuthServiceHelper.logRef(MscAcmeDeploy.class, id);
         mscAcmeDeploy.setId(id);
         mscAcmeDeploy.setSaasId(AuthServiceHelper.getSaasId());
-        mscAcmeDeploy.setCreateDate(new Date());
+        mscAcmeDeploy.setCreateDate(SystemClock.nowDate());
         mscAcmeDeploy.setModifyDate(null);
         mscAcmeDeploy.setState(CommonState.ENABLED.getValue());
         return dao.save(mscAcmeDeploy).onSuccess(savedEntity -> {
@@ -188,7 +187,7 @@ public class MscAcmeDeployController {
             mscAcmeDeployDb.setDeployVendor(mscAcmeDeploy.getDeployVendor());
             mscAcmeDeployDb.setDeployParam(mscAcmeDeploy.getDeployParam());
             mscAcmeDeployDb.setLastUpdate(mscAcmeDeploy.getLastUpdate());
-            mscAcmeDeployDb.setModifyDate(new Date());
+            mscAcmeDeployDb.setModifyDate(SystemClock.nowDate());
             return dao.update(mscAcmeDeployDb).onSuccess(updatedEntity -> {
                 //保存历史记录
                 SysDataHistoryHelper.saveHistory(mscAcmeDeployDb, remark);
@@ -206,7 +205,7 @@ public class MscAcmeDeployController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAcmeDeploy.class, id, remark);
-        return dao.update(new MscAcmeDeploy().modifyDate(new Date()).state(CommonState.ENABLED.getValue()), new AuthIdStateQueryParam(id, CommonState.DISABLED.getValue()));
+        return dao.update(new MscAcmeDeploy().modifyDate(SystemClock.nowDate()).state(CommonState.ENABLED.getValue()), new AuthIdStateQueryParam(id, CommonState.DISABLED.getValue()));
     }
 
     /**
@@ -219,7 +218,7 @@ public class MscAcmeDeployController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData disable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAcmeDeploy.class, id, remark);
-        return dao.update(new MscAcmeDeploy().modifyDate(new Date()).state(CommonState.DISABLED.getValue()), new AuthIdStateQueryParam(id, CommonState.ENABLED.getValue()));
+        return dao.update(new MscAcmeDeploy().modifyDate(SystemClock.nowDate()).state(CommonState.DISABLED.getValue()), new AuthIdStateQueryParam(id, CommonState.ENABLED.getValue()));
     }
 
     /**
@@ -232,7 +231,7 @@ public class MscAcmeDeployController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData delete(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAcmeDeploy.class, id, remark);
-        return dao.update(new MscAcmeDeploy().modifyDate(new Date()).state(CommonState.DELETED.getValue()), new AuthIdStateQueryParam(id, CommonState.DISABLED.getValue()));
+        return dao.update(new MscAcmeDeploy().modifyDate(SystemClock.nowDate()).state(CommonState.DELETED.getValue()), new AuthIdStateQueryParam(id, CommonState.DISABLED.getValue()));
     }
 
 }

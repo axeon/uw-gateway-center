@@ -14,6 +14,7 @@ import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonState;
 import uw.common.dto.ResponseData;
 import uw.common.util.IpMatchUtils;
+import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.gateway.center.acl.filter.vo.MscAclFilterInfo;
 import uw.gateway.center.acl.rate.vo.MscAclRateInfo;
@@ -97,7 +98,7 @@ public class GatewayServiceRpcController {
     @Operation(summary = "获取ssl证书列表", description = "获取ssl证书列表")
     @MscPermDeclare(user = UserType.RPC)
     public ResponseData<List<MscAcmeCert>> getSslCertList() {
-        Date now = new Date();
+        Date now = SystemClock.nowDate();
         String sql = "SELECT * from msc_acme_cert where state=? and expire_date>=? and active_date<=? order by id desc";
         return dao.list(MscAcmeCert.class, sql, new Object[]{CommonState.ENABLED.getValue(), now, now}).onSuccess(datalist -> {
             // 排重后获取每个域名的最新证书。

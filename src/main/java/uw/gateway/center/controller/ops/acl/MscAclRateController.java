@@ -4,12 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
-import uw.gateway.center.acl.MscAclHelper;
-import uw.gateway.center.acl.rate.vo.MscAclRateResult;
-import uw.gateway.center.constant.AclAuditState;
-import uw.gateway.center.constant.GatewayCenterResponseCode;
-import uw.gateway.center.dto.MscAclRateQueryParam;
-import uw.gateway.center.entity.MscAclRate;
 import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
@@ -20,10 +14,15 @@ import uw.common.app.dto.IdStateQueryParam;
 import uw.common.app.dto.SysCritLogQueryParam;
 import uw.common.app.entity.SysCritLog;
 import uw.common.dto.ResponseData;
+import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.dao.DataList;
-
-import java.util.Date;
+import uw.gateway.center.acl.MscAclHelper;
+import uw.gateway.center.acl.rate.vo.MscAclRateResult;
+import uw.gateway.center.constant.AclAuditState;
+import uw.gateway.center.constant.GatewayCenterResponseCode;
+import uw.gateway.center.dto.MscAclRateQueryParam;
+import uw.gateway.center.entity.MscAclRate;
 
 
 /**
@@ -127,14 +126,14 @@ public class MscAclRateController {
         long id = dao.getSequenceId(MscAclRate.class);
         AuthServiceHelper.logRef(MscAclRate.class, id);
         mscAclRate.setId(id);
-        mscAclRate.setCreateDate(new Date());
+        mscAclRate.setCreateDate(SystemClock.nowDate());
         mscAclRate.setModifyDate(null);
         mscAclRate.setState(CommonState.ENABLED.getValue());
         //设置申请人资料
         mscAclRate.setApplyUserId(AuthServiceHelper.getUserId());
         mscAclRate.setApplyUserInfo(AuthServiceHelper.getUserName());
         mscAclRate.setApplyUserIp(AuthServiceHelper.getRemoteIp());
-        mscAclRate.setApplyDate(new Date());
+        mscAclRate.setApplyDate(SystemClock.nowDate());
         //初始化审批人资料
         mscAclRate.setAuditUserId(0);
         mscAclRate.setAuditUserInfo(null);
@@ -157,7 +156,7 @@ public class MscAclRateController {
     public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAclRate.class, id, remark);
         MscAclRate mscAclRate = new MscAclRate();
-        mscAclRate.setModifyDate(new Date());
+        mscAclRate.setModifyDate(SystemClock.nowDate());
         mscAclRate.setState(CommonState.ENABLED.getValue());
         return dao.update(mscAclRate, new IdStateQueryParam(id, CommonState.DISABLED.getValue())).onSuccess(updateResponse -> {
             //更新缓存
@@ -177,7 +176,7 @@ public class MscAclRateController {
         AuthServiceHelper.logInfo(MscAclRate.class, id, remark);
         AuthServiceHelper.logInfo(MscAclRate.class, id, remark);
         MscAclRate mscAclRate = new MscAclRate();
-        mscAclRate.setModifyDate(new Date());
+        mscAclRate.setModifyDate(SystemClock.nowDate());
         mscAclRate.setState(CommonState.DISABLED.getValue());
         return dao.update(mscAclRate, new IdStateQueryParam(id, CommonState.ENABLED.getValue())).onSuccess(updateResponse -> {
             //更新缓存
@@ -197,7 +196,7 @@ public class MscAclRateController {
     public ResponseData delete(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAclRate.class, id, remark);
         MscAclRate mscAclRate = new MscAclRate();
-        mscAclRate.setModifyDate(new Date());
+        mscAclRate.setModifyDate(SystemClock.nowDate());
         mscAclRate.setState(CommonState.DELETED.getValue());
         return dao.update(mscAclRate, new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
 

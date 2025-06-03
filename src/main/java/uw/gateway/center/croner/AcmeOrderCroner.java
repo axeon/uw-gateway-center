@@ -16,7 +16,6 @@ import uw.task.entity.TaskContact;
 import uw.task.entity.TaskCronerConfig;
 import uw.task.entity.TaskCronerLog;
 
-import java.util.Calendar;
 import java.util.Date;
 
 @Component

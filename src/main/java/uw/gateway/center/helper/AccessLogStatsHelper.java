@@ -14,6 +14,7 @@ import uw.cache.FusionCache;
 import uw.common.dto.ResponseData;
 import uw.common.util.DateUtils;
 import uw.common.util.JsonUtils;
+import uw.common.util.SystemClock;
 import uw.gateway.center.conf.GatewayCenterProperties;
 import uw.gateway.center.constant.GatewayCenterConstants;
 import uw.gateway.center.entity.AccessGlobalStats;
@@ -405,7 +406,7 @@ public class AccessLogStatsHelper {
         FusionCache.config(FusionCache.Config.builder().cacheName(GLOBAL_STATS_CACHE).localCacheMaxNum(1000).localCacheExpireMillis(300_000L).globalCacheExpireMillis(300_000L).autoNotifyInvalidate(true).build(), new CacheDataLoader<String, ResponseData<AccessGlobalStats>>() {
             @Override
             public ResponseData<AccessGlobalStats> load(String name) throws Exception {
-                Date now = new Date();
+                Date now = SystemClock.nowDate();
                 Date startDate = DateUtils.beginOfToday(now);
                 return AccessLogStatsHelper.globalStats(startDate, now).onSuccess(stats -> {
                     stats.setCreateDate(now);
@@ -417,7 +418,7 @@ public class AccessLogStatsHelper {
         FusionCache.config(FusionCache.Config.builder().cacheName(GLOBAL_METRICS_CACHE).localCacheMaxNum(1000).localCacheExpireMillis(300_000L).globalCacheExpireMillis(300_000L).autoNotifyInvalidate(true).build(), new CacheDataLoader<String, ResponseData<Map<String, Map<String, Double>>>>() {
             @Override
             public ResponseData<Map<String, Map<String, Double>>> load(String name) throws Exception {
-                Date now = new Date();
+                Date now = SystemClock.nowDate();
                 Date startDate = new Date(now.getTime() - 1000 * 60 * 60 * 24);
                 return AccessLogStatsHelper.globalMetrics(startDate, now, 5);
             }
@@ -427,7 +428,7 @@ public class AccessLogStatsHelper {
         FusionCache.config(FusionCache.Config.builder().cacheName(GLOBAL_CODE_CACHE).localCacheMaxNum(1000).localCacheExpireMillis(300_000L).globalCacheExpireMillis(300_000L).autoNotifyInvalidate(true).build(), new CacheDataLoader<String, ResponseData<Map<String, List<Map<String, Object>>>>>() {
             @Override
             public ResponseData<Map<String, List<Map<String, Object>>>> load(String name) throws Exception {
-                Date now = new Date();
+                Date now = SystemClock.nowDate();
                 Date startDate = new Date(now.getTime() - 1000 * 60 * 60 * 24);
                 return AccessLogStatsHelper.globalCodeData(startDate, now);
             }
@@ -437,7 +438,7 @@ public class AccessLogStatsHelper {
         FusionCache.config(FusionCache.Config.builder().cacheName(GLOBAL_TOP_CACHE).localCacheMaxNum(1000).localCacheExpireMillis(300_000L).globalCacheExpireMillis(300_000L).autoNotifyInvalidate(true).build(), new CacheDataLoader<String, ResponseData<Map<String, List<Map<String, Object>>>>>() {
             @Override
             public ResponseData<Map<String, List<Map<String, Object>>>> load(String name) throws Exception {
-                Date now = new Date();
+                Date now = SystemClock.nowDate();
                 Date startDate = new Date(now.getTime() - 1000 * 60 * 60 * 24);
                 List<AccessLogStatsHelper.TopParam> topParamList = new ArrayList<>();
                 topParamList.add(new AccessLogStatsHelper.TopParam("topSaas", "saasId", "_count", 100, 10));
@@ -645,7 +646,7 @@ public class AccessLogStatsHelper {
 //        AccessLogStatsHelper.esConfig.setServer("http://192.168.88.21:9200");
 //        AccessLogStatsHelper.esConfig.setUsername("elastic");
 //        AccessLogStatsHelper.esConfig.setPassword("espasswd");
-//        Date now = new Date();
+//        Date now = SystemClock.nowDate();
 //        Date startDate = DateUtils.beginOfMonth(now);
 //        Date endDate = DateUtils.endOfYesterday(now);
 //        var globalStats = AccessLogStatsHelper.globalStats(startDate, endDate);

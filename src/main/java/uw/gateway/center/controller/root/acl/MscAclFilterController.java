@@ -4,14 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
-import uw.gateway.center.acl.MscAclHelper;
-import uw.gateway.center.acl.filter.vo.MscAclFilterResult;
-import uw.gateway.center.constant.AclAuditState;
-import uw.gateway.center.constant.GatewayCenterResponseCode;
-import uw.gateway.center.dto.MscAclFilterQueryParam;
-import uw.gateway.center.entity.MscAclFilter;
-import uw.gateway.center.entity.MscAclFilterData;
-import uw.gateway.center.vo.MscAclFilterEx;
 import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
@@ -23,11 +15,19 @@ import uw.common.app.dto.SysCritLogQueryParam;
 import uw.common.app.entity.SysCritLog;
 import uw.common.dto.ResponseData;
 import uw.common.util.IpMatchUtils;
+import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.dao.DataList;
 import uw.dao.vo.QueryParamResult;
+import uw.gateway.center.acl.MscAclHelper;
+import uw.gateway.center.acl.filter.vo.MscAclFilterResult;
+import uw.gateway.center.constant.AclAuditState;
+import uw.gateway.center.constant.GatewayCenterResponseCode;
+import uw.gateway.center.dto.MscAclFilterQueryParam;
+import uw.gateway.center.entity.MscAclFilter;
+import uw.gateway.center.entity.MscAclFilterData;
+import uw.gateway.center.vo.MscAclFilterEx;
 
-import java.util.Date;
 import java.util.stream.Collectors;
 
 
@@ -147,14 +147,14 @@ public class MscAclFilterController {
         long id = dao.getSequenceId(MscAclFilter.class);
         AuthServiceHelper.logRef(MscAclFilter.class, id);
         mscAclFilter.setId(id);
-        mscAclFilter.setCreateDate(new Date());
+        mscAclFilter.setCreateDate(SystemClock.nowDate());
         mscAclFilter.setModifyDate(null);
         mscAclFilter.setState(CommonState.ENABLED.getValue());
         //设置申请人资料
         mscAclFilter.setApplyUserId(AuthServiceHelper.getUserId());
         mscAclFilter.setApplyUserInfo(AuthServiceHelper.getUserName());
         mscAclFilter.setApplyUserIp(AuthServiceHelper.getRemoteIp());
-        mscAclFilter.setApplyDate(new Date());
+        mscAclFilter.setApplyDate(SystemClock.nowDate());
         //初始化审批人资料
         mscAclFilter.setAuditUserId(0);
         mscAclFilter.setAuditUserInfo(null);
@@ -178,7 +178,7 @@ public class MscAclFilterController {
     public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAclFilter.class, id, remark);
         MscAclFilter mscAclFilter = new MscAclFilter();
-        mscAclFilter.setModifyDate(new Date());
+        mscAclFilter.setModifyDate(SystemClock.nowDate());
         mscAclFilter.setState(CommonState.ENABLED.getValue());
         return dao.update(mscAclFilter, new IdStateQueryParam(id, CommonState.DISABLED.getValue())).onSuccess(updateResponse -> {
             //更新缓存
@@ -198,7 +198,7 @@ public class MscAclFilterController {
     public ResponseData disable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAclFilter.class, id, remark);
         MscAclFilter mscAclFilter = new MscAclFilter();
-        mscAclFilter.setModifyDate(new Date());
+        mscAclFilter.setModifyDate(SystemClock.nowDate());
         mscAclFilter.setState(CommonState.DISABLED.getValue());
         return dao.update(mscAclFilter, new IdStateQueryParam(id, CommonState.ENABLED.getValue())).onSuccess(updateResponse -> {
             //更新缓存
@@ -218,7 +218,7 @@ public class MscAclFilterController {
     public ResponseData delete(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAclFilter.class, id, remark);
         MscAclFilter mscAclFilter = new MscAclFilter();
-        mscAclFilter.setModifyDate(new Date());
+        mscAclFilter.setModifyDate(SystemClock.nowDate());
         mscAclFilter.setState(CommonState.DELETED.getValue());
         return dao.update(mscAclFilter, new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
     }
@@ -244,14 +244,14 @@ public class MscAclFilterController {
             return ResponseData.errorCode(GatewayCenterResponseCode.MSC_ACL_IP_DATA_ERROR);
         }
         mscAclFilterData.setId(id);
-        mscAclFilterData.setCreateDate(new Date());
+        mscAclFilterData.setCreateDate(SystemClock.nowDate());
         mscAclFilterData.setModifyDate(null);
         mscAclFilterData.setState(CommonState.ENABLED.getValue());
         //设置申请人资料
         mscAclFilterData.setApplyUserId(AuthServiceHelper.getUserId());
         mscAclFilterData.setApplyUserInfo(AuthServiceHelper.getUserName());
         mscAclFilterData.setApplyUserIp(AuthServiceHelper.getRemoteIp());
-        mscAclFilterData.setApplyDate(new Date());
+        mscAclFilterData.setApplyDate(SystemClock.nowDate());
         //初始化审批人资料
         mscAclFilterData.setAuditUserId(0);
         mscAclFilterData.setAuditUserInfo(null);
@@ -277,7 +277,7 @@ public class MscAclFilterController {
     public ResponseData enableData(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAclFilterData.class, id, remark);
         MscAclFilterData mscAclFilterData = new MscAclFilterData();
-        mscAclFilterData.setModifyDate(new Date());
+        mscAclFilterData.setModifyDate(SystemClock.nowDate());
         mscAclFilterData.setState(CommonState.ENABLED.getValue());
         return dao.update(mscAclFilterData, new IdStateQueryParam(id, CommonState.DISABLED.getValue())).onSuccess(updateResponse -> {
             //更新缓存
@@ -297,7 +297,7 @@ public class MscAclFilterController {
     public ResponseData disableData(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAclFilterData.class, id, remark);
         MscAclFilterData mscAclFilterData = new MscAclFilterData();
-        mscAclFilterData.setModifyDate(new Date());
+        mscAclFilterData.setModifyDate(SystemClock.nowDate());
         mscAclFilterData.setState(CommonState.DISABLED.getValue());
         return dao.update(mscAclFilterData, new IdStateQueryParam(id, CommonState.ENABLED.getValue())).onSuccess(updateResponse -> {
             //更新缓存
@@ -317,7 +317,7 @@ public class MscAclFilterController {
     public ResponseData deleteData(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAclFilterData.class, id, remark);
         MscAclFilterData mscAclFilterData = new MscAclFilterData();
-        mscAclFilterData.setModifyDate(new Date());
+        mscAclFilterData.setModifyDate(SystemClock.nowDate());
         mscAclFilterData.setState(CommonState.DELETED.getValue());
         return dao.update(mscAclFilterData, new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
     }

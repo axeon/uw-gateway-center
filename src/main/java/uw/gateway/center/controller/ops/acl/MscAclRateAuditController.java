@@ -4,10 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
-import uw.gateway.center.acl.MscAclHelper;
-import uw.gateway.center.constant.AclAuditState;
-import uw.gateway.center.dto.MscAclRateQueryParam;
-import uw.gateway.center.entity.MscAclRate;
 import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
@@ -15,10 +11,13 @@ import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonResponseCode;
 import uw.common.dto.ResponseData;
+import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.dao.DataList;
-
-import java.util.Date;
+import uw.gateway.center.acl.MscAclHelper;
+import uw.gateway.center.constant.AclAuditState;
+import uw.gateway.center.dto.MscAclRateQueryParam;
+import uw.gateway.center.entity.MscAclRate;
 
 
 /**
@@ -87,7 +86,7 @@ public class MscAclRateAuditController {
         mscAclRate.setAuditUserInfo( AuthServiceHelper.getUserName() );
         mscAclRate.setAuditUserIp( AuthServiceHelper.getRemoteIp() );
         mscAclRate.setAuditRemark( remark );
-        mscAclRate.setAuditDate( new Date() );
+        mscAclRate.setAuditDate( SystemClock.nowDate() );
         return dao.update(mscAclRate).onSuccess(data -> {
             //更新缓存
             MscAclHelper.invalidateAclRateCache(mscAclRate.getSaasId());
@@ -120,7 +119,7 @@ public class MscAclRateAuditController {
         mscAclRate.setAuditUserInfo( AuthServiceHelper.getUserName() );
         mscAclRate.setAuditUserIp( AuthServiceHelper.getRemoteIp() );
         mscAclRate.setAuditRemark( remark );
-        mscAclRate.setAuditDate( new Date() );
+        mscAclRate.setAuditDate( SystemClock.nowDate() );
         return dao.update(mscAclRate);
     }
 

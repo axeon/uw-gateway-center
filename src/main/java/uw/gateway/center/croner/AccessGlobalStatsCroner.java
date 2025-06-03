@@ -3,6 +3,7 @@ package uw.gateway.center.croner;
 import org.springframework.stereotype.Component;
 import uw.common.dto.ResponseData;
 import uw.common.util.DateUtils;
+import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.gateway.center.entity.AccessGlobalStats;
 import uw.gateway.center.helper.AccessLogStatsHelper;
@@ -28,7 +29,7 @@ public class AccessGlobalStatsCroner extends TaskCroner {
      */
     @Override
     public String runTask(TaskCronerLog taskCronerLog) throws Exception {
-        Date now = new Date();
+        Date now = SystemClock.nowDate();
         Date startDate = DateUtils.beginOfYesterday(now);
         Date endDate = DateUtils.endOfYesterday(now);
         ResponseData<AccessGlobalStats> statsResponse = AccessLogStatsHelper.globalStats(startDate, endDate);

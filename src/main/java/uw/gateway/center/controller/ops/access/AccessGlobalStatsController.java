@@ -1,30 +1,20 @@
 package uw.gateway.center.controller.ops.access;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.*;
-import uw.cache.FusionCache;
-import uw.common.app.dto.AuthIdQueryParam;
-import uw.common.app.dto.IdStateQueryParam;
-import uw.common.app.dto.SysCritLogQueryParam;
-import uw.common.app.dto.SysDataHistoryQueryParam;
-import uw.common.app.entity.SysCritLog;
-import uw.common.app.entity.SysDataHistory;
-import uw.common.app.helper.SysDataHistoryHelper;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import uw.auth.service.AuthServiceHelper;
+import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.common.app.constant.CommonResponseCode;
-import uw.common.app.constant.CommonState;
-import uw.auth.service.AuthServiceHelper;
-import uw.auth.service.annotation.MscPermDeclare;
 import uw.common.dto.ResponseData;
-import uw.dao.*;
+import uw.dao.DaoManager;
+import uw.dao.DataList;
 import uw.gateway.center.dto.AccessGlobalStatsQueryParam;
 import uw.gateway.center.entity.AccessGlobalStats;
-
-import java.util.Date;
 
 
 /**

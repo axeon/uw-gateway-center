@@ -12,6 +12,7 @@ import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonState;
 import uw.common.dto.ResponseData;
+import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.gateway.center.acl.MscAclHelper;
 import uw.gateway.center.constant.AclAuditState;
@@ -53,21 +54,21 @@ public class GatewayClientRpcController {
         mscAclRate.setLimitRequests(limitRequests);
         mscAclRate.setLimitBytes(limitBytes);
         mscAclRate.setExpireDate(expireDate);
-        mscAclRate.setCreateDate(new Date());
+        mscAclRate.setCreateDate(SystemClock.nowDate());
         mscAclRate.setModifyDate(null);
         mscAclRate.setState(CommonState.ENABLED.getValue());
         //设置申请人资料
         mscAclRate.setApplyUserId(AuthServiceHelper.getUserId());
         mscAclRate.setApplyUserInfo(AuthServiceHelper.getUserName());
         mscAclRate.setApplyUserIp(AuthServiceHelper.getRemoteIp());
-        mscAclRate.setApplyDate(new Date());
+        mscAclRate.setApplyDate(SystemClock.nowDate());
         mscAclRate.setApplyRemark("RPC更新配置。");
         //初始化审批人资料
         mscAclRate.setAuditUserId(AuthServiceHelper.getUserId());
         mscAclRate.setAuditUserInfo(AuthServiceHelper.getUserName());
         mscAclRate.setAuditUserIp(AuthServiceHelper.getRemoteIp());
         mscAclRate.setAuditRemark("RPC自动审批通过。");
-        mscAclRate.setAuditDate(new Date());
+        mscAclRate.setAuditDate(SystemClock.nowDate());
         mscAclRate.setAuditState(AclAuditState.CONFIRM.getValue());
         dao.save(mscAclRate);
         //更新缓存
@@ -87,7 +88,7 @@ public class GatewayClientRpcController {
     @MscPermDeclare(user = UserType.RPC, log = ActionLog.CRIT)
     public ResponseData clearSaasRateLimit(@Parameter(description = "saasId") @RequestParam long saasId, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAclRate.class, 0, "清除运营商[" + saasId + "]限速设置！操作备注：" + remark);
-        dao.executeCommand("update msc_acl_rate set modify_date=?, state=? where saas_id=? and state>? ", new Object[]{new Date(), CommonState.DELETED.getValue(), saasId, CommonState.ENABLED.getValue()});
+        dao.executeCommand("update msc_acl_rate set modify_date=?, state=? where saas_id=? and state>? ", new Object[]{SystemClock.nowDate(), CommonState.DELETED.getValue(), saasId, CommonState.ENABLED.getValue()});
         //更新缓存
         MscAclHelper.invalidateAclRateCache(saasId);
         return ResponseData.success();
