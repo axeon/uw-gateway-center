@@ -55,7 +55,6 @@ public class AccessLogStatsHelper {
                   "@timestamp": {
                     "gte": "%s",
                     "lte": "%s",
-                    "time_zone": "%s"
                    }
                  }
                },
@@ -134,7 +133,6 @@ public class AccessLogStatsHelper {
                   "@timestamp": {
                     "gte": "%s",
                     "lte": "%s",
-                    "time_zone": "%s"
                    }
                  }
                },
@@ -210,7 +208,6 @@ public class AccessLogStatsHelper {
                   "@timestamp": {
                     "gte": "%s",
                     "lte": "%s",
-                    "time_zone": "%s"
                   }
                 }
               },
@@ -295,7 +292,6 @@ public class AccessLogStatsHelper {
                   "@timestamp": {
                     "gte": "%s",
                     "lte": "%s",
-                    "time_zone": "%s"
                   }
                 }
               },
@@ -317,7 +313,6 @@ public class AccessLogStatsHelper {
                       "@timestamp": {
                         "gte": "%s",
                         "lte": "%s",
-                        "time_zone": "%s"
                       }
                     }
                   },
