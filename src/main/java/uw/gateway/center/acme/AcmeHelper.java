@@ -622,10 +622,16 @@ public class AcmeHelper {
         return dao.queryForSingleObject(MscAcmeCert.class, sql, new Object[]{domainId, CommonState.ENABLED.getValue(), date, date});
     }
 
-
 //    public static void main(String[] args) {
 //        DaoConfigManager.setConfig(new DaoConfig());
-//        ConnectionManager.initConnectionPool("$ROOT_CONN$", "", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://192.168.88.21:3308/uw_gateway?characterEncoding=utf-8&allowPublicKeyRetrieval=true&useSSL=false&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true", "root", "mysqlRootPassword", null, 1, 10, 600, 1800, 3600);
+//        ConnectionManager.initConnectionPool("$ROOT_CONN$", "", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://192.168.88.21:3308/uw_gateway", "root", "mysqlRootPassword", null, 1, 10, 600, 1800, 3600);
+//        dao.executeCommand("update msc_acme_account set create_date=now() where id=?",new Object[]{2L});
+//        dao.executeCommand("update msc_acme_account set modify_date=? where id=?",new Object[]{new Date(),2L});
+//        dao.executeCommand("update msc_acme_account set account_desc=? where id=?",new Object[]{"测试一下中文录入！",2L});
+//
+//        MscAcmeAccount acmeDomain = dao.load(MscAcmeAccount.class,2L).getData();
+//        System.out.println(acmeDomain.toString());
+//
 //        System.out.println(fetchCert(0));
 //        System.out.println(JsonUtils.toString(getAcmeVendors()));
 //        System.out.println(JsonUtils.toString(getDnsVendorMap()));
