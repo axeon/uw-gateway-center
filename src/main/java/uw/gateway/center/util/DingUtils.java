@@ -18,6 +18,7 @@ public class DingUtils {
             .connectTimeout( 10_000L )
             .readTimeout( 10_000L )
             .writeTimeout( 10_000L )
+            .hostnameVerifier((hostName, sslSession) -> true)
             .build() );
 
 
