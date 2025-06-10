@@ -23,6 +23,7 @@ import uw.httpclient.http.HttpConfig;
 import uw.httpclient.http.HttpInterface;
 import uw.httpclient.json.JsonInterfaceHelper;
 import uw.httpclient.util.MediaTypes;
+import uw.httpclient.util.SSLContextUtils;
 import uw.log.es.vo.SearchResponse;
 
 import java.util.*;
@@ -43,7 +44,7 @@ public class AccessLogStatsHelper {
     /**
      * ES查询接口。
      */
-    private static final HttpInterface HTTP_INTERFACE = new JsonInterfaceHelper(HttpConfig.builder().retryOnConnectionFailure(true).connectTimeout(60_000L).readTimeout(180_000L).writeTimeout(60_000L).hostnameVerifier((hostName, sslSession) -> true).build());
+    private static final HttpInterface HTTP_INTERFACE = new JsonInterfaceHelper(HttpConfig.builder().retryOnConnectionFailure(true).connectTimeout(60_000L).readTimeout(180_000L).writeTimeout(60_000L).trustManager( SSLContextUtils.getTrustAllManager() ).sslSocketFactory( SSLContextUtils.getTruestAllSocketFactory()).hostnameVerifier((hostName, sslSession) -> true).build());
 
     /**
      * 基于saas的分组指标统计dsl。

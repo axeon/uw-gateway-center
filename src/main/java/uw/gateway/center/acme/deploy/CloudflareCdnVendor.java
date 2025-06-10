@@ -13,6 +13,7 @@ import uw.httpclient.http.HttpConfig;
 import uw.httpclient.http.HttpData;
 import uw.httpclient.http.HttpInterface;
 import uw.httpclient.json.JsonInterfaceHelper;
+import uw.httpclient.util.SSLContextUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public class CloudflareCdnVendor implements DeployVendor {
             .readTimeout(30000)
             .writeTimeout(30000)
             .retryOnConnectionFailure(true)
+            .trustManager( SSLContextUtils.getTrustAllManager() ).sslSocketFactory( SSLContextUtils.getTruestAllSocketFactory())
             .hostnameVerifier((hostName, sslSession) -> true)
             .build());
     /**

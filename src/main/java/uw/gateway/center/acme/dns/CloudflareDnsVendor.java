@@ -12,6 +12,7 @@ import uw.httpclient.http.HttpConfig;
 import uw.httpclient.http.HttpData;
 import uw.httpclient.http.HttpInterface;
 import uw.httpclient.json.JsonInterfaceHelper;
+import uw.httpclient.util.SSLContextUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.Map;
  * Cloudflare DNS API 实现
  */
 public class CloudflareDnsVendor implements DnsVendor {
-    private static final HttpInterface DNS_CLIENT = new JsonInterfaceHelper(HttpConfig.builder().connectTimeout(30000).readTimeout(30000).writeTimeout(30000).retryOnConnectionFailure(true).hostnameVerifier((hostName, sslSession) -> true).build());
+    private static final HttpInterface DNS_CLIENT = new JsonInterfaceHelper(HttpConfig.builder().connectTimeout(30000).readTimeout(30000).writeTimeout(30000).retryOnConnectionFailure(true).trustManager( SSLContextUtils.getTrustAllManager() ).sslSocketFactory( SSLContextUtils.getTruestAllSocketFactory()).hostnameVerifier((hostName, sslSession) -> true).build());
 
     private static final String API_URL = "https://api.cloudflare.com/client/v4";
     private String apiToken;

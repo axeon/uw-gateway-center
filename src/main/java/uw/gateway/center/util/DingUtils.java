@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import uw.httpclient.http.HttpConfig;
 import uw.httpclient.http.HttpInterface;
 import uw.httpclient.json.JsonInterfaceHelper;
+import uw.httpclient.util.SSLContextUtils;
 
 /**
  * 发送钉钉通知的工具类。
@@ -18,6 +19,7 @@ public class DingUtils {
             .connectTimeout( 10_000L )
             .readTimeout( 10_000L )
             .writeTimeout( 10_000L )
+            .trustManager( SSLContextUtils.getTrustAllManager() ).sslSocketFactory( SSLContextUtils.getTruestAllSocketFactory())
             .hostnameVerifier((hostName, sslSession) -> true)
             .build() );
 
