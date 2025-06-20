@@ -3,14 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>uw-gateway-center</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <name>uw-gateway-center</name>
     <description>uw-gateway-center</description>
 
     <parent>
         <groupId>com.umtone</groupId>
         <artifactId>uw-base</artifactId>
-        <version>2025.0601.0018</version>
+        <version>2025.0601.0020</version>
         <relativePath/>
     </parent>
 
