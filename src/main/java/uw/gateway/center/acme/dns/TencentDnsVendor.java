@@ -152,13 +152,13 @@ public class TencentDnsVendor implements DnsVendor {
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @Schema(title = "vendor参数", description = "vendor参数")
     public enum Param implements JsonConfigParam {
-        API_KEY(JsonConfigParam.ParamType.STRING, "", "API Key", "API Key", ""),
-        API_SECRET(JsonConfigParam.ParamType.STRING, "", "API密钥", "API密钥", "");
+        API_KEY(JsonConfigParam.ParamType.STRING, "", "API Key", ""),
+        API_SECRET(JsonConfigParam.ParamType.STRING, "", "API密钥", "");
 
         private final JsonConfigParam.ParamData paramData;
 
-        Param(JsonConfigParam.ParamType type, String value, String name, String desc, String regex) {
-            this.paramData = new JsonConfigParam.ParamData(EnumUtils.enumNameToDotCase(name()), type, value, name, desc, regex);
+        Param(ParamType type, String value, String desc, String regex) {
+            this.paramData = new JsonConfigParam.ParamData(EnumUtils.enumNameToDotCase(name()), type, value, desc, regex);
         }
 
         /**

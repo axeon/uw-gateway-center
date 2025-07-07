@@ -207,14 +207,14 @@ public class AliCdnVendor implements DeployVendor {
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @Schema(title = "Vendor参数", description = "阿里云CDN Vendor参数")
     public enum Param implements JsonConfigParam {
-        API_KEY(JsonConfigParam.ParamType.STRING, "", "API Key", "API Key", ""),
-        API_SECRET(JsonConfigParam.ParamType.STRING, "", "API Secret", "API Secret", ""),
-        REGION(JsonConfigParam.ParamType.STRING, "", "Region", "Region", "");
+        API_KEY(JsonConfigParam.ParamType.STRING, "", "API Key", ""),
+        API_SECRET(JsonConfigParam.ParamType.STRING, "", "API Secret", ""),
+        REGION(JsonConfigParam.ParamType.STRING, "", "Region", "");
 
         private final JsonConfigParam.ParamData paramData;
 
-        Param(JsonConfigParam.ParamType type, String value, String name, String desc, String regex) {
-            this.paramData = new JsonConfigParam.ParamData(EnumUtils.enumNameToDotCase(name()), type, value, name, desc, regex);
+        Param(ParamType type, String value, String desc, String regex) {
+            this.paramData = new JsonConfigParam.ParamData(EnumUtils.enumNameToDotCase(name()), type, value, desc, regex);
         }
 
         @Override

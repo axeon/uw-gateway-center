@@ -198,12 +198,12 @@ public class QiniuCdnVendor implements DeployVendor {
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @Schema(title = "Vendor参数", description = "七牛CDN Vendor参数")
     public enum Param implements JsonConfigParam {
-        API_KEY(JsonConfigParam.ParamType.STRING, "", "API Key", "API Key", ""), API_SECRET(JsonConfigParam.ParamType.STRING, "", "API Secret", "API Secret", ""), DOMAIN(JsonConfigParam.ParamType.STRING, "", "Domain", "主机域名", "");
+        API_KEY(JsonConfigParam.ParamType.STRING, "", "API Key", ""), API_SECRET(JsonConfigParam.ParamType.STRING, "", "API Secret", ""), DOMAIN(JsonConfigParam.ParamType.STRING, "", "主机域名", "");
 
         private final JsonConfigParam.ParamData paramData;
 
-        Param(JsonConfigParam.ParamType type, String value, String name, String desc, String regex) {
-            this.paramData = new JsonConfigParam.ParamData(EnumUtils.enumNameToDotCase(name()), type, value, name, desc, regex);
+        Param(ParamType type, String value, String desc, String regex) {
+            this.paramData = new JsonConfigParam.ParamData(EnumUtils.enumNameToDotCase(name()), type, value, desc, regex);
         }
 
         @Override
