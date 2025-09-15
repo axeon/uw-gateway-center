@@ -15,7 +15,7 @@ public class UwGatewayCenterApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(UwGatewayCenterApplication.class).beanNameGenerator((beanDefinition, beanDefinitionRegistry) -> {
             String beanClassName = beanDefinition.getBeanClassName();
-            if (beanClassName.contains("uw.gateway")) {
+            if (beanClassName.startsWith("uw.gateway")) {
                 return beanClassName;
             }
 
