@@ -404,7 +404,7 @@ public class AccessLogStatsHelper {
         AccessLogStatsHelper.gatewayCenterProperties = gatewayCenterProperties;
         AccessLogStatsHelper.esConfig = gatewayCenterProperties.getAccessLogEs();
         //stats缓存。
-        FusionCache.config(FusionCache.Config.builder().cacheName(GLOBAL_STATS_CACHE).localCacheMaxNum(1000).localCacheExpireMillis(300_000L).globalCacheExpireMillis(300_000L).autoNotifyInvalidate(true).build(), new CacheDataLoader<String, ResponseData<AccessGlobalStats>>() {
+        FusionCache.config(FusionCache.Config.builder().cacheName(GLOBAL_STATS_CACHE).localCacheMaxNum(1000).cacheExpireMillis(300_000L).autoNotifyInvalidate(true).build(), new CacheDataLoader<String, ResponseData<AccessGlobalStats>>() {
             @Override
             public ResponseData<AccessGlobalStats> load(String name) throws Exception {
                 Date now = SystemClock.nowDate();
@@ -416,7 +416,7 @@ public class AccessLogStatsHelper {
             }
         });
         //metric缓存。
-        FusionCache.config(FusionCache.Config.builder().cacheName(GLOBAL_METRICS_CACHE).localCacheMaxNum(1000).localCacheExpireMillis(300_000L).globalCacheExpireMillis(300_000L).autoNotifyInvalidate(true).build(), new CacheDataLoader<String, ResponseData<Map<String, Map<String, Double>>>>() {
+        FusionCache.config(FusionCache.Config.builder().cacheName(GLOBAL_METRICS_CACHE).localCacheMaxNum(1000).cacheExpireMillis(300_000L).autoNotifyInvalidate(true).build(), new CacheDataLoader<String, ResponseData<Map<String, Map<String, Double>>>>() {
             @Override
             public ResponseData<Map<String, Map<String, Double>>> load(String name) throws Exception {
                 Date now = SystemClock.nowDate();
@@ -426,7 +426,7 @@ public class AccessLogStatsHelper {
         });
 
         //CODE  缓存。
-        FusionCache.config(FusionCache.Config.builder().cacheName(GLOBAL_CODE_CACHE).localCacheMaxNum(1000).localCacheExpireMillis(300_000L).globalCacheExpireMillis(300_000L).autoNotifyInvalidate(true).build(), new CacheDataLoader<String, ResponseData<Map<String, List<Map<String, Object>>>>>() {
+        FusionCache.config(FusionCache.Config.builder().cacheName(GLOBAL_CODE_CACHE).localCacheMaxNum(1000).cacheExpireMillis(300_000L).autoNotifyInvalidate(true).build(), new CacheDataLoader<String, ResponseData<Map<String, List<Map<String, Object>>>>>() {
             @Override
             public ResponseData<Map<String, List<Map<String, Object>>>> load(String name) throws Exception {
                 Date now = SystemClock.nowDate();
@@ -436,7 +436,7 @@ public class AccessLogStatsHelper {
         });
 
         //top缓存。
-        FusionCache.config(FusionCache.Config.builder().cacheName(GLOBAL_TOP_CACHE).localCacheMaxNum(1000).localCacheExpireMillis(300_000L).globalCacheExpireMillis(300_000L).autoNotifyInvalidate(true).build(), new CacheDataLoader<String, ResponseData<Map<String, List<Map<String, Object>>>>>() {
+        FusionCache.config(FusionCache.Config.builder().cacheName(GLOBAL_TOP_CACHE).localCacheMaxNum(1000).cacheExpireMillis(300_000L).autoNotifyInvalidate(true).build(), new CacheDataLoader<String, ResponseData<Map<String, List<Map<String, Object>>>>>() {
             @Override
             public ResponseData<Map<String, List<Map<String, Object>>>> load(String name) throws Exception {
                 Date now = SystemClock.nowDate();
