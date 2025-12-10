@@ -73,7 +73,7 @@ public enum GatewayCenterResponseCode implements ResponseCode {
      * @return
      */
     @Override
-    public MessageSource getMessageSource() {
+    public MessageSource messageSource() {
         return MESSAGE_SOURCE;
     }
 
