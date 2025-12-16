@@ -40,6 +40,7 @@ public class AccessSaasStatsController {
     @MscPermDeclare(user = UserType.SAAS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public ResponseData<DataList<AccessSaasStats>> list(AccessSaasStatsQueryParam queryParam){
         AuthServiceHelper.logRef(AccessSaasStats.class);
+        queryParam.setSaasId(AuthServiceHelper.getSaasId());
         return dao.list(AccessSaasStats.class, queryParam);
     }
 
