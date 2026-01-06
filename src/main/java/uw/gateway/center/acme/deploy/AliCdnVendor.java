@@ -3,6 +3,7 @@ package uw.gateway.center.acme.deploy;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.web.util.UriUtils;
 import uw.common.app.vo.JsonConfigBox;
 import uw.common.app.vo.JsonConfigParam;
 import uw.common.dto.ResponseData;
@@ -17,7 +18,6 @@ import uw.httpclient.util.SSLContextUtils;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -38,7 +38,7 @@ public class AliCdnVendor implements DeployVendor {
             .readTimeout(30000)
             .writeTimeout(30000)
             .retryOnConnectionFailure(true)
-            .trustManager( SSLContextUtils.getTrustAllManager() ).sslSocketFactory( SSLContextUtils.getTruestAllSocketFactory())
+            .trustManager(SSLContextUtils.getTrustAllManager()).sslSocketFactory(SSLContextUtils.getTruestAllSocketFactory())
             .hostnameVerifier((hostName, sslSession) -> true)
             .build());
     /**
@@ -183,8 +183,7 @@ public class AliCdnVendor implements DeployVendor {
      * URL编码
      */
     private String percentEncode(String value) {
-        return URLEncoder.encode(value, StandardCharsets.UTF_8).replace("+", "%20")
-                .replace("*", "%2A").replace("%7E", "~");
+        return UriUtils.encode(value, StandardCharsets.UTF_8);
     }
 
     /**

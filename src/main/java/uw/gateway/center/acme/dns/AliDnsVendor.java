@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.util.UriUtils;
 import uw.common.app.vo.JsonConfigBox;
 import uw.common.app.vo.JsonConfigParam;
 import uw.common.dto.ResponseData;
@@ -238,7 +239,7 @@ public class AliDnsVendor implements DnsVendor {
      */
     private String percentEncode(String value) {
         try {
-            return URLEncoder.encode(value, StandardCharsets.UTF_8).replace("+", "%20").replace("*", "%2A").replace("%7E", "~");
+            return UriUtils.encode(value, StandardCharsets.UTF_8);
         } catch (Exception e) {
             return value;
         }

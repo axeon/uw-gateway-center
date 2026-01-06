@@ -3,6 +3,7 @@ package uw.gateway.center.acme.deploy;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.web.util.UriUtils;
 import uw.common.app.vo.JsonConfigBox;
 import uw.common.app.vo.JsonConfigParam;
 import uw.common.dto.ResponseData;
@@ -17,7 +18,6 @@ import uw.httpclient.util.SSLContextUtils;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -28,7 +28,7 @@ public class TencentCdnVendor implements DeployVendor {
     /**
      * HTTP客户端
      */
-    private static final HttpInterface CDN_CLIENT = new JsonInterfaceHelper(HttpConfig.builder().connectTimeout(30000).readTimeout(30000).writeTimeout(30000).retryOnConnectionFailure(true).trustManager( SSLContextUtils.getTrustAllManager() ).sslSocketFactory( SSLContextUtils.getTruestAllSocketFactory()).hostnameVerifier((hostName, sslSession) -> true).build());
+    private static final HttpInterface CDN_CLIENT = new JsonInterfaceHelper(HttpConfig.builder().connectTimeout(30000).readTimeout(30000).writeTimeout(30000).retryOnConnectionFailure(true).trustManager(SSLContextUtils.getTrustAllManager()).sslSocketFactory(SSLContextUtils.getTruestAllSocketFactory()).hostnameVerifier((hostName, sslSession) -> true).build());
     /**
      * API地址
      */
@@ -212,7 +212,7 @@ public class TencentCdnVendor implements DeployVendor {
             if (sb.length() > 0) {
                 sb.append("&");
             }
-            sb.append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue().toString(), StandardCharsets.UTF_8));
+            sb.append(entry.getKey()).append("=").append(UriUtils.encode(entry.getValue().toString(), StandardCharsets.UTF_8));
         }
         return sb.toString();
     }
