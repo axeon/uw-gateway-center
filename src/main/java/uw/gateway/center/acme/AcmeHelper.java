@@ -241,7 +241,17 @@ public class AcmeHelper {
         slog.log("账号创建成功！");
         Order order = null;
         try {
-            order = account.newOrder().domains(acmeDomain.getDomainName()).create();
+            String domainName = acmeDomain.getDomainName();
+            if (StringUtils.isBlank(domainName)) {
+                slog.log("域名不能为空！");
+                return ResponseData.errorMsg("域名不能为空！");
+            }
+            slog.log("开始下单域名证书：" + domainName);
+            if (domainName.startsWith("*.")){
+                order = account.newOrder().domains(domainName, domainName.substring(2)).create();
+            }else {
+                order = account.newOrder().domains(acmeDomain.getDomainName()).create();
+            }
         } catch (AcmeException e) {
             slog.log("订单创建失败！" + e.getMessage());
             return ResponseData.errorMsg("订单创建失败！" + e.getMessage());
