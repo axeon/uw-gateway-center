@@ -141,18 +141,19 @@ public class AccessEsLogQueryParam extends AuthPageQueryParam {
     @Schema(title = "创建时间范围", description = "创建时间范围")
     private Date[] requestDateRange;
 
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
+            put( "id", "id" );
+            put("@timestamp","\\\"@timestamp\\\"");
+    }};
+
     /**
      * 允许的排序属性。
-     * key:排序名 value:排序字段
      *
      * @return
      */
     @Override
     public Map<String, String> ALLOWED_SORT_PROPERTY() {
-        return new HashMap<>() {{
-            put( "id", "id" );
-            put("@timestamp","\\\"@timestamp\\\"");
-        }};
+        return ALLOWED_SORT_PROPERTY;
     }
 
     public AccessEsLogQueryParam() {

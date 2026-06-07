@@ -29,17 +29,17 @@ public class FixedWindowRateLimiter {
     /**
      * 当前窗口字节数。
      */
-    private final AtomicInteger windowBytes = new AtomicInteger(0);
+    private final AtomicInteger windowBytes = new AtomicInteger( 0 );
 
     /**
      * 当前窗口请求数。
      */
-    private final AtomicInteger windowRequests = new AtomicInteger(0);
+    private final AtomicInteger windowRequests = new AtomicInteger( 0 );
 
     /**
      * 当前窗口开始时间。
      */
-    private final AtomicLong windowStartMillis = new AtomicLong(0);
+    private final AtomicLong windowStartMillis = new AtomicLong( 0 );
 
     /**
      * 构造函数。
@@ -68,11 +68,17 @@ public class FixedWindowRateLimiter {
         }
 
         long current = SystemClock.now();
-        long remainMillis = windowSizeInMillis - (current - windowStartMillis.get());
+        long start = windowStartMillis.get();
+        long remainMillis = windowSizeInMillis - (current - start);
         if (remainMillis < 0) {
-            windowStartMillis.set(current);
-            windowRequests.set(0);
-            windowBytes.set(0);
+            // CAS确保只有一个线程能成功重置窗口
+            long newStart = current - (current - start) % windowSizeInMillis;
+            if (windowStartMillis.compareAndSet(start, newStart)) {
+                windowRequests.set(0);
+                windowBytes.set(0);
+            }
+            start = windowStartMillis.get();
+            remainMillis = windowSizeInMillis - (current - start);
         }
         //检测请求数
         int overRequests = windowRequests.addAndGet(requests) - limitRequests;
@@ -92,10 +98,9 @@ public class FixedWindowRateLimiter {
     /**
      * 递增bytes。
      * 因为拦截之后才能真正计入流量，所以需要单独调用。
-     *
      * @param bytes
      */
-    public void addBytes(int bytes) {
+    public void addBytes(int bytes){
         windowBytes.addAndGet(bytes);
     }
 }

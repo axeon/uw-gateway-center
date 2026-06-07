@@ -3,13 +3,12 @@ package uw.gateway.center.acl;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import uw.auth.client.conf.AuthClientProperties;
@@ -35,10 +34,9 @@ import java.util.concurrent.TimeUnit;
 /**
  * 访问控制服务。
  */
-@Service
 public class MscAclHelper {
 
-    private static final Logger log = LoggerFactory.getLogger( MscAclHelper.class );
+    private static final Logger log = LoggerFactory.getLogger(MscAclHelper.class);
 
     /**
      * ip过滤配置缓存名。
@@ -94,7 +92,7 @@ public class MscAclHelper {
 
         //限流缓存。第一层缓存10_000,key=saasId，value=Cache。第二层100_000,key=rateKey,value=FixedWindowRateLimiter。
         rateLimitCache =
-                Caffeine.newBuilder().maximumSize( 10_000 ).expireAfterAccess( 30, TimeUnit.MINUTES ).build( saasId -> Caffeine.newBuilder().maximumSize( 100_000 ).expireAfterAccess( 30, TimeUnit.MINUTES ).build() );
+                Caffeine.newBuilder().maximumSize( 10_000 ).expireAfterAccess( 30, TimeUnit.MINUTES ).build( saasId -> Caffeine.newBuilder().maximumSize( 100_000 ).build() );
     }
 
     /**
@@ -108,16 +106,16 @@ public class MscAclHelper {
      * @return
      */
     public static MscAclRateResult testRateLimit(long saasId, int userType, long userId, String uri, String ipPermit, int requestsPermit, int bytesPermit) {
-        MscAclRateInfo aclRateInfo = MscAclHelper.matchAclRate( saasId, userType, userId, uri );
+        MscAclRateInfo aclRateInfo = MscAclHelper.matchAclRate(saasId, userType, userId, uri);
         if (aclRateInfo != null) {
             int[] rateLimitResult = null;
             //获取限速器实例。
-            FixedWindowRateLimiter rateLimiter = MscAclHelper.getRateLimiter( aclRateInfo, saasId, userType, userId, uri, ipPermit );
+            FixedWindowRateLimiter rateLimiter = MscAclHelper.getRateLimiter(aclRateInfo, saasId, userType, userId, uri, ipPermit);
             if (rateLimiter != null) {
                 //限速检测。
-                rateLimitResult = rateLimiter.tryAcquire( requestsPermit, bytesPermit );
+                rateLimitResult = rateLimiter.tryAcquire(requestsPermit, bytesPermit);
             }
-            return new MscAclRateResult( ipPermit, aclRateInfo, rateLimitResult );
+            return new MscAclRateResult(ipPermit, aclRateInfo, rateLimitResult);
         } else {
             return MscAclRateResult.ALLOWED;
         }
@@ -134,16 +132,16 @@ public class MscAclHelper {
      * @return
      */
     public static MscAclRateResult rateLimit(long saasId, int userType, long userId, String uri, String ipPermit, int requestsPermit, int bytesPermit) {
-        MscAclRateInfo aclRateInfo = MscAclHelper.matchAclRate( saasId, userType, userId, uri );
+        MscAclRateInfo aclRateInfo = MscAclHelper.matchAclRate(saasId, userType, userId, uri);
         if (aclRateInfo != null) {
             int[] rateLimitResult;
             //获取限速器实例。
-            FixedWindowRateLimiter rateLimiter = MscAclHelper.getRateLimiter( aclRateInfo, saasId, userType, userId, uri, ipPermit );
+            FixedWindowRateLimiter rateLimiter = MscAclHelper.getRateLimiter(aclRateInfo, saasId, userType, userId, uri, ipPermit);
             if (rateLimiter != null) {
                 //限速检测。
-                rateLimitResult = rateLimiter.tryAcquire( requestsPermit, bytesPermit );
+                rateLimitResult = rateLimiter.tryAcquire(requestsPermit, bytesPermit);
                 if (rateLimitResult != null) {
-                    return new MscAclRateResult( ipPermit, aclRateInfo, rateLimitResult );
+                    return new MscAclRateResult(ipPermit, aclRateInfo, rateLimitResult);
                 }
             }
         }
@@ -167,13 +165,13 @@ public class MscAclHelper {
         if (aclRate.getLimitType() == MscAclRateLimitType.IP.getValue()) {
             rateKey = aclRate.getId() + ":" + ipPermit;
         } else if (aclRate.getLimitType() == MscAclRateLimitType.SAAS_LEVEL.getValue()) {
-            rateKey = aclRate.getId() + ":" + SaasIdUtils.getVipLevel( saasId );
+            rateKey = aclRate.getId() + ":" + SaasIdUtils.getVipLevel(saasId);
         } else if (aclRate.getLimitType() == MscAclRateLimitType.USER_TYPE.getValue()) {
             rateKey = aclRate.getId() + ":" + userType;
         } else if (aclRate.getLimitType() == MscAclRateLimitType.USER_ID.getValue()) {
             rateKey = aclRate.getId() + ":" + userId;
         } else if (aclRate.getLimitType() == MscAclRateLimitType.SAAS_LEVEL_URI.getValue()) {
-            rateKey = aclRate.getId() + ":" + SaasIdUtils.getVipLevel( saasId ) + ":" + uri;
+            rateKey = aclRate.getId() + ":" + SaasIdUtils.getVipLevel(saasId) + ":" + uri;
         } else if (aclRate.getLimitType() == MscAclRateLimitType.USER_TYPE_URI.getValue()) {
             rateKey = aclRate.getId() + ":" + userType + ":" + uri;
         } else if (aclRate.getLimitType() == MscAclRateLimitType.USER_ID_URI.getValue()) {
@@ -182,8 +180,7 @@ public class MscAclHelper {
         if (rateKey == null) {
             return null;
         }
-        return rateLimitCache.get( aclRate.getSaasId() ).get( rateKey, x -> new FixedWindowRateLimiter( aclRate.getLimitSeconds() * 1000L, aclRate.getLimitRequests(),
-                aclRate.getLimitBytes() ) );
+        return rateLimitCache.get(aclRate.getSaasId()).get(rateKey, x -> new FixedWindowRateLimiter(aclRate.getLimitSeconds() * 1000L, aclRate.getLimitRequests(), aclRate.getLimitBytes()));
     }
 
     /**
@@ -196,18 +193,18 @@ public class MscAclHelper {
      * @return
      */
     public static MscAclFilterResult testFilterIp(long saasId, int userType, long userId, InetAddress inetAddress) {
-        MscAclFilterInfo filterInfo = matchAclFilter( saasId, userType, userId );
+        MscAclFilterInfo filterInfo = matchAclFilter(saasId, userType, userId);
         //没有过滤配置，则直接返回true。
         if (filterInfo != null) {
             boolean allowed = true;
-            if (filterInfo.getFilterType() == MscAclFilterType.ALLOW_LIST.getValue() && !IpMatchUtils.matches( filterInfo.getIpRangeList(), inetAddress )) {
+            if (filterInfo.getFilterType() == MscAclFilterType.ALLOW_LIST.getValue() && !IpMatchUtils.matches(filterInfo.getIpRangeList(), inetAddress)) {
                 //白名单匹配失败。
                 allowed = false;
-            } else if (filterInfo.getFilterType() == MscAclFilterType.DENY_LIST.getValue() && IpMatchUtils.matches( filterInfo.getIpRangeList(), inetAddress )) {
+            } else if (filterInfo.getFilterType() == MscAclFilterType.DENY_LIST.getValue() && IpMatchUtils.matches(filterInfo.getIpRangeList(), inetAddress)) {
                 //黑名单匹配成功。
                 allowed = false;
             }
-            return new MscAclFilterResult( inetAddress.getHostAddress(), filterInfo, allowed );
+            return new MscAclFilterResult(inetAddress.getHostAddress(), filterInfo, allowed);
         }
         return MscAclFilterResult.ALLOWED;
     }
@@ -222,15 +219,15 @@ public class MscAclHelper {
      * @return
      */
     public static MscAclFilterResult filterIp(long saasId, int userType, long userId, String ipStr, InetAddress inetAddress) {
-        MscAclFilterInfo filterInfo = matchAclFilter( saasId, userType, userId );
+        MscAclFilterInfo filterInfo = matchAclFilter(saasId, userType, userId);
         //没有过滤配置，则直接返回true。
         if (filterInfo != null) {
-            if (filterInfo.getFilterType() == MscAclFilterType.ALLOW_LIST.getValue() && !IpMatchUtils.matches( filterInfo.getIpRangeList(), inetAddress )) {
+            if (filterInfo.getFilterType() == MscAclFilterType.ALLOW_LIST.getValue() && !IpMatchUtils.matches(filterInfo.getIpRangeList(), inetAddress)) {
                 //白名单匹配失败。
-                return new MscAclFilterResult( ipStr, filterInfo );
-            } else if (filterInfo.getFilterType() == MscAclFilterType.DENY_LIST.getValue() && IpMatchUtils.matches( filterInfo.getIpRangeList(), inetAddress )) {
+                return new MscAclFilterResult(ipStr, filterInfo);
+            } else if (filterInfo.getFilterType() == MscAclFilterType.DENY_LIST.getValue() && IpMatchUtils.matches(filterInfo.getIpRangeList(), inetAddress)) {
                 //黑名单匹配成功。
-                return new MscAclFilterResult( ipStr, filterInfo );
+                return new MscAclFilterResult(ipStr, filterInfo);
             }
         }
         return MscAclFilterResult.ALLOWED;
@@ -242,19 +239,19 @@ public class MscAclHelper {
      * @param saasId
      * @param userType
      * @param userId
-     * @param ipStr
+     * @param inetAddress
      * @return
      */
-    public static MscAclFilterResult filterIp(long saasId, int userType, long userId, String ipStr) {
-        MscAclFilterInfo filterInfo = matchAclFilter( saasId, userType, userId );
+    public static MscAclFilterResult filterIp(long saasId, int userType, long userId, InetAddress inetAddress) {
+        MscAclFilterInfo filterInfo = matchAclFilter(saasId, userType, userId);
         //没有过滤配置，则直接返回true。
         if (filterInfo != null) {
-            if (filterInfo.getFilterType() == MscAclFilterType.ALLOW_LIST.getValue() && !IpMatchUtils.matches( filterInfo.getIpRangeList(), ipStr )) {
+            if (filterInfo.getFilterType() == MscAclFilterType.ALLOW_LIST.getValue() && !IpMatchUtils.matches(filterInfo.getIpRangeList(), inetAddress)) {
                 //白名单匹配失败。
-                return new MscAclFilterResult( ipStr, filterInfo );
-            } else if (filterInfo.getFilterType() == MscAclFilterType.DENY_LIST.getValue() && IpMatchUtils.matches( filterInfo.getIpRangeList(), ipStr )) {
+                return new MscAclFilterResult(inetAddress.getHostAddress(), filterInfo);
+            } else if (filterInfo.getFilterType() == MscAclFilterType.DENY_LIST.getValue() && IpMatchUtils.matches(filterInfo.getIpRangeList(), inetAddress)) {
                 //黑名单匹配成功。
-                return new MscAclFilterResult( ipStr, filterInfo );
+                return new MscAclFilterResult(inetAddress.getHostAddress(), filterInfo);
             }
         }
         return MscAclFilterResult.ALLOWED;
@@ -266,7 +263,7 @@ public class MscAclHelper {
      * @param saasId
      */
     public static void refreshAclFilterCache(Long saasId) {
-        FusionCache.refresh( MSC_ACL_FILTER, saasId );
+        FusionCache.refresh(MSC_ACL_FILTER, saasId);
     }
 
     /**
@@ -275,7 +272,7 @@ public class MscAclHelper {
      * @param saasId
      */
     public static void refreshAclRateCache(Long saasId) {
-        FusionCache.refresh( MSC_ACL_RATE, saasId );
+        FusionCache.refresh(MSC_ACL_RATE, saasId);
     }
 
     /**
@@ -284,7 +281,7 @@ public class MscAclHelper {
      * @param saasId
      */
     public static void invalidateAclFilterCache(Long saasId) {
-        FusionCache.invalidate( MSC_ACL_FILTER, saasId );
+        FusionCache.invalidate(MSC_ACL_FILTER, saasId);
     }
 
     /**
@@ -293,7 +290,7 @@ public class MscAclHelper {
      * @param saasId
      */
     public static void invalidateAclRateCache(Long saasId) {
-        FusionCache.invalidate( MSC_ACL_RATE, saasId );
+        FusionCache.invalidate(MSC_ACL_RATE, saasId);
     }
 
     /**
@@ -309,11 +306,11 @@ public class MscAclHelper {
         MscAclRateInfo aclRate = null;
         //先匹配saas过滤器。
         if (saasId > -1L) {
-            aclRate = matchAclRate( getAclRateList( saasId ), saasId, userType, userId, uri );
+            aclRate = matchAclRate(getAclRateList(saasId), saasId, userType, userId, uri);
         }
         //匹配系统过滤器。
         if (aclRate == null) {
-            aclRate = matchAclRate( getAclRateList( -1L ), saasId, userType, userId, uri );
+            aclRate = matchAclRate(getAclRateList(-1L), saasId, userType, userId, uri);
         }
         return aclRate;
     }
@@ -328,13 +325,23 @@ public class MscAclHelper {
         MscAclFilterInfo filterInfo = null;
         //先匹配saas过滤器。
         if (saasId > -1L) {
-            filterInfo = matchAclFilter( getAclFilterList( saasId ), userType, userId );
+            filterInfo = matchAclFilter(getAclFilterList(saasId), userType, userId);
         }
         //匹配系统过滤器。
         if (filterInfo == null) {
-            filterInfo = matchAclFilter( getAclFilterList( -1L ), userType, userId );
+            filterInfo = matchAclFilter(getAclFilterList(-1L), userType, userId);
         }
         return filterInfo;
+    }
+
+    /**
+     * 路径前缀匹配，以 / 为分隔。
+     */
+    private static boolean isUriMatched(String uri, String limitUri) {
+        if (Strings.CS.equals(uri, limitUri)) {
+            return true;
+        }
+        return uri.startsWith(limitUri) && (limitUri.endsWith("/") || uri.length() == limitUri.length() || uri.charAt(limitUri.length()) == '/');
     }
 
     /**
@@ -358,7 +365,7 @@ public class MscAclHelper {
             } else if (aclRate.getLimitType() == MscAclRateLimitType.IP.getValue()) {
                 return aclRate;
             } else if (aclRate.getLimitType() == MscAclRateLimitType.SAAS_LEVEL.getValue()) {
-                if (aclRate.getSaasLevel() == -1 || aclRate.getSaasLevel() == SaasIdUtils.getVipLevel( saasId )) {
+                if (aclRate.getSaasLevel() == -1 || aclRate.getSaasLevel() == SaasIdUtils.getVipLevel(saasId)) {
                     return aclRate;
                 }
             } else if (aclRate.getLimitType() == MscAclRateLimitType.USER_TYPE.getValue()) {
@@ -370,16 +377,15 @@ public class MscAclHelper {
                     return aclRate;
                 }
             } else if (aclRate.getLimitType() == MscAclRateLimitType.SAAS_LEVEL_URI.getValue()) {
-                if ((aclRate.getSaasLevel() == -1 || aclRate.getSaasLevel() == SaasIdUtils.getVipLevel( saasId )) && (StringUtils.equals( uri, aclRate.getLimitUri() ) || StringUtils.startsWith( uri, aclRate.getLimitUri() ))) {
+                if ((aclRate.getSaasLevel() == -1 || aclRate.getSaasLevel() == SaasIdUtils.getVipLevel(saasId)) && isUriMatched(uri, aclRate.getLimitUri())) {
                     return aclRate;
                 }
             } else if (aclRate.getLimitType() == MscAclRateLimitType.USER_TYPE_URI.getValue()) {
-                if ((aclRate.getUserType() == -1 || aclRate.getUserType() == userType) && (StringUtils.equals( uri, aclRate.getLimitUri() ) || StringUtils.startsWith( uri,
-                        aclRate.getLimitUri() ))) {
+                if ((aclRate.getUserType() == -1 || aclRate.getUserType() == userType) && isUriMatched(uri, aclRate.getLimitUri())) {
                     return aclRate;
                 }
             } else if (aclRate.getLimitType() == MscAclRateLimitType.USER_ID_URI.getValue()) {
-                if ((aclRate.getUserId() == -1 || aclRate.getUserId() == userId) && aclRate.getUserId() == userId && (StringUtils.equals( uri, aclRate.getLimitUri() ) || StringUtils.startsWith( uri, aclRate.getLimitUri() ))) {
+                if ((aclRate.getUserId() == -1 || aclRate.getUserId() == userId) && isUriMatched(uri, aclRate.getLimitUri())) {
                     return aclRate;
                 }
             }
@@ -424,7 +430,7 @@ public class MscAclHelper {
      * @return
      */
     private static List<MscAclFilterInfo> getAclFilterList(long saasId) {
-        return FusionCache.get( MSC_ACL_FILTER, saasId );
+        return FusionCache.get(MSC_ACL_FILTER, saasId);
     }
 
     /**
@@ -434,7 +440,7 @@ public class MscAclHelper {
      * @return
      */
     private static List<MscAclRateInfo> getAclRateList(long saasId) {
-        return FusionCache.get( MSC_ACL_RATE, saasId );
+        return FusionCache.get(MSC_ACL_RATE, saasId);
     }
 
 }

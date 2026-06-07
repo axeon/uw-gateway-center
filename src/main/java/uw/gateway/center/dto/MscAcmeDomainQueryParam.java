@@ -22,15 +22,7 @@ public class MscAcmeDomainQueryParam extends AuthPageQueryParam{
         super(saasId);
     }
 	
-    /**
-     * 允许的排序属性。
-     * key:排序名 value:排序字段
-     *
-     * @return
-     */
-    @Override
-    public Map<String, String> ALLOWED_SORT_PROPERTY() {
-        return new HashMap<>() {{
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
             put( "id", "id" );
             put( "saasId", "saas_id" );
             put( "accountId", "account_id" );
@@ -44,7 +36,16 @@ public class MscAcmeDomainQueryParam extends AuthPageQueryParam{
             put( "createDate", "create_date" );
             put( "modifyDate", "modify_date" );
             put( "state", "state" );
-        }};
+    }};
+
+    /**
+     * 允许的排序属性。
+     *
+     * @return
+     */
+    @Override
+    public Map<String, String> ALLOWED_SORT_PROPERTY() {
+        return ALLOWED_SORT_PROPERTY;
     }
 
     /**

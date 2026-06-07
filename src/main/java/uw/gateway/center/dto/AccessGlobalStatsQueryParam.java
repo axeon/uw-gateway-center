@@ -14,15 +14,7 @@ import java.util.Map;
 @Schema(title = "全局访问统计列表查询参数", description = "全局访问统计列表查询参数")
 public class AccessGlobalStatsQueryParam extends PageQueryParam{
 
-    /**
-     * 允许的排序属性。
-     * key:排序名 value:排序字段
-     *
-     * @return
-     */
-    @Override
-    public Map<String, String> ALLOWED_SORT_PROPERTY() {
-        return new HashMap<>() {{
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
             put( "id", "id" );
             put( "statsDate", "stats_date" );
             put( "createDate", "create_date" );
@@ -40,7 +32,16 @@ public class AccessGlobalStatsQueryParam extends PageQueryParam{
             put( "response404", "response_404" );
             put( "response401", "response_401" );
             put( "response403", "response_403" );
-        }};
+    }};
+
+    /**
+     * 允许的排序属性。
+     *
+     * @return
+     */
+    @Override
+    public Map<String, String> ALLOWED_SORT_PROPERTY() {
+        return ALLOWED_SORT_PROPERTY;
     }
 
     /**

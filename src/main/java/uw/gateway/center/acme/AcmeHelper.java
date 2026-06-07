@@ -248,7 +248,12 @@ public class AcmeHelper {
             }
             slog.log("开始下单域名证书：" + domainName);
             if (domainName.startsWith("*.")){
-                order = account.newOrder().domains(domainName, domainName.substring(2)).create();
+                String rootDomain = domainName.substring(2);
+                if (StringUtils.isBlank(rootDomain)) {
+                    slog.log("通配符域名格式错误！");
+                    return ResponseData.errorMsg("通配符域名格式错误！");
+                }
+                order = account.newOrder().domains(domainName, rootDomain).create();
             }else {
                 order = account.newOrder().domains(acmeDomain.getDomainName()).create();
             }
