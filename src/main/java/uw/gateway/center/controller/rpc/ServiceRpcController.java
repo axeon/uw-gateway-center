@@ -2,16 +2,19 @@ package uw.gateway.center.controller.rpc;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonState;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.gateway.center.acl.MscAclHelper;
@@ -21,9 +24,15 @@ import uw.gateway.center.entity.MscAclRate;
 
 import java.util.Date;
 
-public class GatewayClientRpcController {
+/**
+ * 网关客户端RPC接口。
+ */
+@RestController
+@Tag(name = "网关客户端接口")
+@RequestMapping("/rpc/service")
+public class ServiceRpcController {
 
-    private static final Logger logger = LoggerFactory.getLogger(GatewayClientRpcController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ServiceRpcController.class);
 
     /**
      * Dao工厂。
@@ -88,7 +97,7 @@ public class GatewayClientRpcController {
     @MscPermDeclare(user = UserType.RPC, log = ActionLog.CRIT)
     public ResponseData clearSaasRateLimit(@Parameter(description = "saasId") @RequestParam long saasId, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAclRate.class, 0, "清除运营商[" + saasId + "]限速设置！操作备注：" + remark);
-        dao.executeCommand("update msc_acl_rate set modify_date=?, state=? where saas_id=? and state>? ", new Object[]{SystemClock.nowDate(), CommonState.DELETED.getValue(), saasId, CommonState.ENABLED.getValue()});
+        dao.execute("update msc_acl_rate set modify_date=?, state=? where saas_id=? and state>? ", new Object[]{SystemClock.nowDate(), CommonState.DELETED.getValue(), saasId, CommonState.ENABLED.getValue()});
         //更新缓存
         MscAclHelper.invalidateAclRateCache(saasId);
         return ResponseData.success();

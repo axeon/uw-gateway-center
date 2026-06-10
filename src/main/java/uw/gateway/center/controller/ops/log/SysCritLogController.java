@@ -12,10 +12,10 @@ import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.common.app.dto.SysCritLogQueryParam;
 import uw.common.app.entity.SysCritLog;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
-import uw.dao.QueryParam;
+import uw.common.data.PageList;
+import uw.common.dto.QueryParam;
 
 
 /**
@@ -38,7 +38,7 @@ public class SysCritLogController {
     @GetMapping("/list")
     @Operation(summary = "关键日志查询", description = "关键日志查询")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysCritLog>> list(SysCritLogQueryParam queryParam) {
+    public ResponseData<PageList<SysCritLog>> list(SysCritLogQueryParam queryParam) {
         AuthServiceHelper.logRef(SysCritLog.class);
         //钉死关键参数
         queryParam.setUserType(UserType.OPS.getValue());

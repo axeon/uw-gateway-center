@@ -13,10 +13,10 @@ import uw.common.app.constant.CommonState;
 import uw.common.app.dto.IdStateQueryParam;
 import uw.common.app.dto.SysCritLogQueryParam;
 import uw.common.app.entity.SysCritLog;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.gateway.center.acl.MscAclHelper;
 import uw.gateway.center.acl.rate.vo.MscAclRateResult;
 import uw.gateway.center.constant.AclAuditState;
@@ -46,7 +46,7 @@ public class MscAclRateController {
     @GetMapping("/list")
     @Operation(summary = "列表系统流控配置", description = "列表系统流控配置")
     @MscPermDeclare(user = UserType.ROOT, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<MscAclRate>> list(MscAclRateQueryParam queryParam) {
+    public ResponseData<PageList<MscAclRate>> list(MscAclRateQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAclRate.class);
         return dao.list(MscAclRate.class, queryParam);
     }
@@ -59,7 +59,7 @@ public class MscAclRateController {
     @GetMapping("/liteList")
     @Operation(summary = "轻量级列表系统流控配置", description = "轻量级列表系统流控配置，一般用于select控件。")
     @MscPermDeclare(user = UserType.ROOT, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<DataList<MscAclRate>> liteList(MscAclRateQueryParam queryParam) {
+    public ResponseData<PageList<MscAclRate>> liteList(MscAclRateQueryParam queryParam) {
         queryParam.SELECT_SQL("SELECT id,saas_id,user_id,limit_type,limit_uri,limit_seconds,limit_requests,limit_bytes,remark,create_date,modify_date,state from msc_acl_rate ");
         return dao.list(MscAclRate.class, queryParam);
     }
@@ -87,7 +87,7 @@ public class MscAclRateController {
     @GetMapping("/listCritLog")
     @Operation(summary = "查询操作日志", description = "查询操作日志")
     @MscPermDeclare(user = UserType.ROOT, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
+    public ResponseData<PageList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAclRate.class, queryParam.getBizId());
         queryParam.setBizTypeClass(MscAclRate.class);
         return dao.list(SysCritLog.class, queryParam);
@@ -125,7 +125,7 @@ public class MscAclRateController {
             mscAclRate.setLimitUri("");
         }
         //判断是否已存在同类型配置
-        MscAclRate exists = dao.queryForSingleObject(MscAclRate.class, "select * from msc_acl_rate where saas_id=? and saas_level=? and user_type=? and user_id=? and limit_type=? and limit_uri=? and state>?",
+        MscAclRate exists = dao.queryForObject(MscAclRate.class, "select * from msc_acl_rate where saas_id=? and saas_level=? and user_type=? and user_id=? and limit_type=? and limit_uri=? and state>?",
                 new Object[]{mscAclRate.getSaasId(), mscAclRate.getSaasLevel(), mscAclRate.getUserType(), mscAclRate.getUserId(), mscAclRate.getLimitType(), mscAclRate.getLimitUri(), CommonState.DELETED.getValue()}).getData();
         if (exists != null) {
             return ResponseData.errorCode(GatewayCenterResponseCode.MSC_ACL_EXISTS_ERROR, exists.getId(), exists.getLimitName());

@@ -12,12 +12,12 @@ import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.dao.DaoManager;
-import uw.dao.QueryParam;
 import uw.dao.vo.QueryParamResult;
 import uw.gateway.center.dto.AccessEsLogQueryParam;
 import uw.gateway.center.entity.AccessEsLog;
 import uw.log.es.LogClient;
-import uw.log.es.vo.ESDataList;
+import uw.common.data.PageList;
+import uw.common.dto.QueryParam;
 
 /**
  * 本接口主要查询日志.
@@ -47,14 +47,14 @@ public class AccessLogController {
     @GetMapping("/list")
     @Operation(summary = "访问日志查询", description = "访问日志查询")
     @MscPermDeclare(user = UserType.ADMIN, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ESDataList<AccessEsLog> list(AccessEsLogQueryParam queryParam) {
+    public PageList<AccessEsLog> list(AccessEsLogQueryParam queryParam) {
         AuthServiceHelper.logRef(AccessEsLog.class);
         //钉死关键参数
         queryParam.CLEAR_SORT().ADD_SORT("@timestamp", QueryParam.SORT_DESC);
         QueryParamResult result = dao.parseQueryParam(AccessEsLog.class, queryParam);
         String dsl = logClient.translateSqlToDsl(result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT());
         String loginLogIndex = "uw.gateway.access.log";
-        return logClient.mapQueryResponseToEDataList(logClient.dslQuery(AccessEsLog.class, loginLogIndex, dsl), queryParam.START_INDEX(), queryParam.RESULT_NUM());
+        return logClient.mapQueryResponseToPageList(logClient.dslQuery(AccessEsLog.class, loginLogIndex, dsl), queryParam.START_INDEX(), queryParam.RESULT_NUM());
     }
 
 

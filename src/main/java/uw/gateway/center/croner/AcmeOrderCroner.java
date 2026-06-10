@@ -2,7 +2,7 @@ package uw.gateway.center.croner;
 
 import org.springframework.stereotype.Component;
 import uw.common.app.constant.CommonState;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.DateUtils;
 import uw.dao.DaoManager;
 import uw.gateway.center.acme.AcmeHelper;

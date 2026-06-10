@@ -10,10 +10,10 @@ import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonResponseCode;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.dao.vo.QueryParamResult;
 import uw.gateway.center.acl.MscAclHelper;
 import uw.gateway.center.constant.AclAuditState;
@@ -47,7 +47,7 @@ public class MscAclFilterAuditController {
     @GetMapping("/list")
     @Operation(summary = "列表IP过滤器", description = "列表IP过滤器")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<MscAclFilterEx>> list(MscAclFilterQueryParam queryParam) {
+    public ResponseData<PageList<MscAclFilterEx>> list(MscAclFilterQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAclFilter.class);
         //附加子表过滤条件。
         if (queryParam.getDataQueryParam() != null) {
@@ -59,8 +59,8 @@ public class MscAclFilterAuditController {
         return dao.list(MscAclFilterEx.class, queryParam).onSuccess(filterList -> {
             if (filterList.size() > 0) {
                 String filterIds = filterList.stream().map(x -> String.valueOf(x.getId())).collect(Collectors.joining(","));
-                DataList<MscAclFilterData> dataList = dao.list(MscAclFilterData.class, "SELECT * from msc_acl_filter_data where filter_id in (" + filterIds + ")").getData();
-                filterList.results().forEach(x -> x.setDataList(dataList.stream().filter(y -> y.getFilterId() == x.getId()).collect(Collectors.toList())));
+                PageList<MscAclFilterData> dataList = dao.list(MscAclFilterData.class, "SELECT * from msc_acl_filter_data where filter_id in (" + filterIds + ")").getData();
+                filterList.list().forEach(x -> x.setDataList(dataList.stream().filter(y -> y.getFilterId() == x.getId()).collect(Collectors.toList())));
             }
         });
     }
@@ -77,7 +77,7 @@ public class MscAclFilterAuditController {
     public ResponseData<MscAclFilterEx> load(@Parameter(description = "主键ID", required = true) @RequestParam long id) {
         AuthServiceHelper.logRef(MscAclFilter.class, id);
         return dao.load(MscAclFilterEx.class, id).onSuccess(filter -> {
-            filter.setDataList(dao.list(MscAclFilterData.class, "SELECT * from msc_acl_filter_data where filter_id=?", new Object[]{id}).getData().results());
+            filter.setDataList(dao.list(MscAclFilterData.class, "SELECT * from msc_acl_filter_data where filter_id=?", new Object[]{id}).getData().list());
         });
     }
 

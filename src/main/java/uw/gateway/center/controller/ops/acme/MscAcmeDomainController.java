@@ -18,10 +18,10 @@ import uw.common.app.dto.SysDataHistoryQueryParam;
 import uw.common.app.entity.SysCritLog;
 import uw.common.app.entity.SysDataHistory;
 import uw.common.app.helper.SysDataHistoryHelper;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.gateway.center.acme.AcmeHelper;
 import uw.gateway.center.dto.MscAcmeDomainQueryParam;
 import uw.gateway.center.entity.MscAcmeDomain;
@@ -47,7 +47,7 @@ public class MscAcmeDomainController {
     @GetMapping("/list")
     @Operation(summary = "列表acme域名", description = "列表acme域名")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<MscAcmeDomain>> list(MscAcmeDomainQueryParam queryParam) {
+    public ResponseData<PageList<MscAcmeDomain>> list(MscAcmeDomainQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAcmeDomain.class);
         return dao.list(MscAcmeDomain.class, queryParam);
     }
@@ -60,7 +60,7 @@ public class MscAcmeDomainController {
     @GetMapping("/liteList")
     @Operation(summary = "轻量级列表acme域名", description = "轻量级列表acme域名，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<DataList<MscAcmeDomain>> liteList(MscAcmeDomainQueryParam queryParam) {
+    public ResponseData<PageList<MscAcmeDomain>> liteList(MscAcmeDomainQueryParam queryParam) {
         queryParam.SELECT_SQL( "SELECT id,saas_id,account_id,domain_name,domain_cert_alg,acme_vendor,dns_vendor,last_update,last_active_date,last_expire_date,create_date,modify_date,state from msc_acme_domain " );
         return dao.list(MscAcmeDomain.class, queryParam);
     }
@@ -75,7 +75,7 @@ public class MscAcmeDomainController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public ResponseData<MscAcmeDomain> load(@Parameter(description = "主键ID", required = true) @RequestParam long id) {
         AuthServiceHelper.logRef(MscAcmeDomain.class, id);
-        return dao.queryForSingleObject(MscAcmeDomain.class, new AuthIdQueryParam(id));
+        return dao.queryForObject(MscAcmeDomain.class, new AuthIdQueryParam(id));
     }
 
     /**
@@ -87,7 +87,7 @@ public class MscAcmeDomainController {
     @GetMapping("/listDataHistory")
     @Operation(summary = "查询数据历史", description = "查询数据历史")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysDataHistory>> listDataHistory(SysDataHistoryQueryParam queryParam) {
+    public ResponseData<PageList<SysDataHistory>> listDataHistory(SysDataHistoryQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAcmeDomain.class, queryParam.getEntityId());
         queryParam.setEntityClass(MscAcmeDomain.class);
         return dao.list(SysDataHistory.class, queryParam);
@@ -102,7 +102,7 @@ public class MscAcmeDomainController {
     @GetMapping("/listCritLog")
     @Operation(summary = "查询操作日志", description = "查询操作日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
+    public ResponseData<PageList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAcmeDomain.class, queryParam.getBizId());
         queryParam.setBizTypeClass(MscAcmeDomain.class);
         return dao.list(SysCritLog.class, queryParam);
@@ -118,7 +118,7 @@ public class MscAcmeDomainController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<?> applyCert(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAcmeDomain.class, id, remark);
-        return dao.queryForSingleObject(MscAcmeDomain.class, new AuthIdQueryParam(id)).onSuccess(mscAcmeDomainDb -> {
+        return dao.queryForObject(MscAcmeDomain.class, new AuthIdQueryParam(id)).onSuccess(mscAcmeDomainDb -> {
             //尝试加锁，先锁定60S.
             long lockStamp = GlobalLocker.tryLock("AcmeDomainApplyCert", id, 180_000L);
             if (lockStamp == 0) {
@@ -164,7 +164,7 @@ public class MscAcmeDomainController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<MscAcmeDomain> update(@RequestBody MscAcmeDomain mscAcmeDomain, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAcmeDomain.class, mscAcmeDomain.getId(), remark);
-        return dao.queryForSingleObject(MscAcmeDomain.class, new AuthIdQueryParam(mscAcmeDomain.getId())).onSuccess(mscAcmeDomainDb -> {
+        return dao.queryForObject(MscAcmeDomain.class, new AuthIdQueryParam(mscAcmeDomain.getId())).onSuccess(mscAcmeDomainDb -> {
             mscAcmeDomainDb.setDomainName(mscAcmeDomain.getDomainName());
             mscAcmeDomainDb.setDomainAlias(mscAcmeDomain.getDomainAlias());
             mscAcmeDomainDb.setAccountId(mscAcmeDomain.getAccountId());

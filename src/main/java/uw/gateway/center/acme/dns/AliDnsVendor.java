@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.util.UriUtils;
 import uw.common.app.vo.JsonConfigBox;
 import uw.common.app.vo.JsonConfigParam;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.EnumUtils;
 import uw.common.util.JsonUtils;
 import uw.gateway.center.acme.DnsVendor;

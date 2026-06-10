@@ -10,9 +10,9 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.gateway.center.dto.AccessSaasStatsQueryParam;
 import uw.gateway.center.entity.AccessSaasStats;
 
@@ -38,7 +38,7 @@ public class AccessSaasStatsController {
     @GetMapping("/list")
     @Operation(summary = "列表访问统计", description = "列表访问统计")
     @MscPermDeclare(user = UserType.ADMIN, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<AccessSaasStats>> list(AccessSaasStatsQueryParam queryParam){
+    public ResponseData<PageList<AccessSaasStats>> list(AccessSaasStatsQueryParam queryParam){
         AuthServiceHelper.logRef(AccessSaasStats.class);
         return dao.list(AccessSaasStats.class, queryParam);
     }

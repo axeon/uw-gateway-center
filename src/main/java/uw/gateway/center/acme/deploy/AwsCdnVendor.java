@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.codec.binary.Hex;
 import uw.common.app.vo.JsonConfigBox;
 import uw.common.app.vo.JsonConfigParam;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.EnumUtils;
 import uw.common.util.JsonUtils;
 import uw.gateway.center.acme.DeployVendor;

@@ -17,10 +17,10 @@ import uw.common.app.dto.SysDataHistoryQueryParam;
 import uw.common.app.entity.SysCritLog;
 import uw.common.app.entity.SysDataHistory;
 import uw.common.app.helper.SysDataHistoryHelper;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.gateway.center.dto.MscAcmeAccountQueryParam;
 import uw.gateway.center.entity.MscAcmeAccount;
 
@@ -45,7 +45,7 @@ public class MscAcmeAccountController {
     @GetMapping("/list")
     @Operation(summary = "列表acme账号", description = "列表acme账号")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<MscAcmeAccount>> list(MscAcmeAccountQueryParam queryParam) {
+    public ResponseData<PageList<MscAcmeAccount>> list(MscAcmeAccountQueryParam queryParam) {
         queryParam.SELECT_SQL("SELECT id,saas_id,account_name,account_desc,account_cert_alg,create_date,modify_date,state from msc_acme_account ");
         AuthServiceHelper.logRef(MscAcmeAccount.class);
         return dao.list(MscAcmeAccount.class, queryParam);
@@ -59,7 +59,7 @@ public class MscAcmeAccountController {
     @GetMapping("/liteList")
     @Operation(summary = "轻量级列表acme账号", description = "轻量级列表acme账号，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<DataList<MscAcmeAccount>> liteList(MscAcmeAccountQueryParam queryParam) {
+    public ResponseData<PageList<MscAcmeAccount>> liteList(MscAcmeAccountQueryParam queryParam) {
         queryParam.SELECT_SQL("SELECT id,saas_id,account_name,create_date,modify_date,state from msc_acme_account ");
         return dao.list(MscAcmeAccount.class, queryParam);
     }
@@ -74,7 +74,7 @@ public class MscAcmeAccountController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public ResponseData<MscAcmeAccount> load(@Parameter(description = "主键ID", required = true) @RequestParam long id) {
         AuthServiceHelper.logRef(MscAcmeAccount.class, id);
-        return dao.queryForSingleObject(MscAcmeAccount.class, new AuthIdQueryParam(id));
+        return dao.queryForObject(MscAcmeAccount.class, new AuthIdQueryParam(id));
     }
 
     /**
@@ -86,7 +86,7 @@ public class MscAcmeAccountController {
     @GetMapping("/listDataHistory")
     @Operation(summary = "查询数据历史", description = "查询数据历史")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysDataHistory>> listDataHistory(SysDataHistoryQueryParam queryParam) {
+    public ResponseData<PageList<SysDataHistory>> listDataHistory(SysDataHistoryQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAcmeAccount.class, queryParam.getEntityId());
         queryParam.setEntityClass(MscAcmeAccount.class);
         return dao.list(SysDataHistory.class, queryParam);
@@ -101,7 +101,7 @@ public class MscAcmeAccountController {
     @GetMapping("/listCritLog")
     @Operation(summary = "查询操作日志", description = "查询操作日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
+    public ResponseData<PageList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAcmeAccount.class, queryParam.getBizId());
         queryParam.setBizTypeClass(MscAcmeAccount.class);
         return dao.list(SysCritLog.class, queryParam);
@@ -142,7 +142,7 @@ public class MscAcmeAccountController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<MscAcmeAccount> update(@RequestBody MscAcmeAccount mscAcmeAccount, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAcmeAccount.class, mscAcmeAccount.getId(), remark);
-        return dao.queryForSingleObject(MscAcmeAccount.class, new AuthIdQueryParam(mscAcmeAccount.getId())).onSuccess(mscAcmeAccountDb -> {
+        return dao.queryForObject(MscAcmeAccount.class, new AuthIdQueryParam(mscAcmeAccount.getId())).onSuccess(mscAcmeAccountDb -> {
             mscAcmeAccountDb.setAccountName(mscAcmeAccount.getAccountName());
             mscAcmeAccountDb.setAccountDesc(mscAcmeAccount.getAccountDesc());
             mscAcmeAccountDb.setEabId(mscAcmeAccount.getEabId());

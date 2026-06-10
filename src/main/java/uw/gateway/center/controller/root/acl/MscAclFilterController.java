@@ -13,11 +13,11 @@ import uw.common.app.constant.CommonState;
 import uw.common.app.dto.IdStateQueryParam;
 import uw.common.app.dto.SysCritLogQueryParam;
 import uw.common.app.entity.SysCritLog;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.IpMatchUtils;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.dao.vo.QueryParamResult;
 import uw.gateway.center.acl.MscAclHelper;
 import uw.gateway.center.acl.filter.vo.MscAclFilterResult;
@@ -52,7 +52,7 @@ public class MscAclFilterController {
     @GetMapping("/list")
     @Operation(summary = "列表IP过滤器", description = "列表IP过滤器")
     @MscPermDeclare(user = UserType.ROOT, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<MscAclFilterEx>> list(MscAclFilterQueryParam queryParam) {
+    public ResponseData<PageList<MscAclFilterEx>> list(MscAclFilterQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAclFilter.class);
         //附加子表过滤条件。
         if (queryParam.getDataQueryParam() != null) {
@@ -64,8 +64,8 @@ public class MscAclFilterController {
         return dao.list(MscAclFilterEx.class, queryParam).onSuccess(filterList -> {
             if (filterList.size() > 0) {
                 String filterIds = filterList.stream().map(x -> String.valueOf(x.getId())).collect(Collectors.joining(","));
-                DataList<MscAclFilterData> dataList = dao.list(MscAclFilterData.class, "SELECT * from msc_acl_filter_data where filter_id in (" + filterIds + ")").getData();
-                filterList.results().forEach(x -> x.setDataList(dataList.stream().filter(y -> y.getFilterId() == x.getId()).collect(Collectors.toList())));
+                PageList<MscAclFilterData> dataList = dao.list(MscAclFilterData.class, "SELECT * from msc_acl_filter_data where filter_id in (" + filterIds + ")").getData();
+                filterList.list().forEach(x -> x.setDataList(dataList.stream().filter(y -> y.getFilterId() == x.getId()).collect(Collectors.toList())));
             }
         });
     }
@@ -78,7 +78,7 @@ public class MscAclFilterController {
     @GetMapping("/liteList")
     @Operation(summary = "轻量级列表IP过滤器", description = "轻量级列表IP过滤器，一般用于select控件。")
     @MscPermDeclare(user = UserType.ROOT, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<DataList<MscAclFilter>> liteList(MscAclFilterQueryParam queryParam) {
+    public ResponseData<PageList<MscAclFilter>> liteList(MscAclFilterQueryParam queryParam) {
         queryParam.SELECT_SQL("SELECT id,saas_id,user_id,user_type,filter_type,filter_name,filter_desc,create_date,modify_date,state from msc_acl_filter ");
         return dao.list(MscAclFilter.class, queryParam);
     }
@@ -95,7 +95,7 @@ public class MscAclFilterController {
     public ResponseData<MscAclFilterEx> load(@Parameter(description = "主键ID", required = true) @RequestParam long id) {
         AuthServiceHelper.logRef(MscAclFilter.class, id);
         return dao.load(MscAclFilterEx.class, id).onSuccess(filter -> {
-            filter.setDataList(dao.list(MscAclFilterData.class, "SELECT * from msc_acl_filter_data where filter_id=?", new Object[]{id}).getData().results());
+            filter.setDataList(dao.list(MscAclFilterData.class, "SELECT * from msc_acl_filter_data where filter_id=?", new Object[]{id}).getData().list());
         });
     }
 
@@ -108,7 +108,7 @@ public class MscAclFilterController {
     @GetMapping("/listCritLog")
     @Operation(summary = "查询操作日志", description = "查询操作日志")
     @MscPermDeclare(user = UserType.ROOT, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
+    public ResponseData<PageList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAclFilter.class, queryParam.getBizId());
         queryParam.setBizTypeClass(MscAclFilter.class);
         return dao.list(SysCritLog.class, queryParam);
@@ -139,7 +139,7 @@ public class MscAclFilterController {
     @Operation(summary = "新增IP过滤器", description = "新增IP过滤器")
     @MscPermDeclare(user = UserType.ROOT, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<MscAclFilter> save(@RequestBody MscAclFilter mscAclFilter) {
-        MscAclFilter exists = dao.queryForSingleObject(MscAclFilter.class, "select * from msc_acl_filter where saas_id=? and user_type=? and user_id=? and state>?",
+        MscAclFilter exists = dao.queryForObject(MscAclFilter.class, "select * from msc_acl_filter where saas_id=? and user_type=? and user_id=? and state>?",
                 new Object[]{mscAclFilter.getSaasId(), mscAclFilter.getUserType(), mscAclFilter.getUserId(), CommonState.DELETED.getValue()}).getData();
         if (exists != null) {
             return ResponseData.errorCode(GatewayCenterResponseCode.MSC_ACL_EXISTS_ERROR, exists.getId(), exists.getFilterName());

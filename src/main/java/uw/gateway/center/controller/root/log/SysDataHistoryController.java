@@ -12,10 +12,10 @@ import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.common.app.dto.SysDataHistoryQueryParam;
 import uw.common.app.entity.SysDataHistory;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
-import uw.dao.QueryParam;
+import uw.common.data.PageList;
+import uw.common.dto.QueryParam;
 
 
 /**
@@ -39,7 +39,7 @@ public class SysDataHistoryController {
     @GetMapping("/list")
     @Operation(summary = "数据历史查询", description = "数据历史查询")
     @MscPermDeclare(user = UserType.ROOT, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysDataHistory>> list(SysDataHistoryQueryParam queryParam) {
+    public ResponseData<PageList<SysDataHistory>> list(SysDataHistoryQueryParam queryParam) {
         AuthServiceHelper.logRef(SysDataHistory.class);
         queryParam.CLEAR_SORT().ADD_SORT("id", QueryParam.SORT_DESC);
         return dao.list(SysDataHistory.class, queryParam);

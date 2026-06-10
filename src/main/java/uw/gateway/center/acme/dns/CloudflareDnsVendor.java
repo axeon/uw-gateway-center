@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import uw.common.app.vo.JsonConfigBox;
 import uw.common.app.vo.JsonConfigParam;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.EnumUtils;
 import uw.gateway.center.acme.DnsVendor;
 import uw.httpclient.http.HttpConfig;

@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uw.common.app.constant.CommonState;
 import uw.common.app.vo.JsonConfigBox;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.DateUtils;
 import uw.common.util.JsonUtils;
 import uw.common.util.SystemClock;
@@ -477,7 +477,7 @@ public class AcmeHelper {
                 acmeDomain.setLastExpireDate(expireDate);
                 dao.update(acmeDomain);
                 // 更新当前域名下的其他合法证书状态为禁用。
-                dao.executeCommand("update msc_acme_cert set state=? where state=? and domain_id=? and id<?", new Object[]{CommonState.DISABLED.getValue(), CommonState.ENABLED.getValue(), mscAcmeCert.getDomainId(), mscAcmeCert.getId()});
+                dao.execute("update msc_acme_cert set state=? where state=? and domain_id=? and id<?", new Object[]{CommonState.DISABLED.getValue(), CommonState.ENABLED.getValue(), mscAcmeCert.getDomainId(), mscAcmeCert.getId()});
                 // 执行域名部署。
                 deployDomainCert(domainId, mscAcmeCert.getId());
                 return ResponseData.success(mscAcmeCert);
@@ -494,7 +494,7 @@ public class AcmeHelper {
      * @return
      */
     public static ResponseData<List<Long>> deployDomainCert(long domainId, long certId) {
-        return dao.queryForSingleList(Long.class, "select deploy_id from msc_acme_deploy where domain_id=? and state=?", new Object[]{domainId, CommonState.ENABLED.getValue()}).onSuccess(x -> {
+        return dao.queryForValueList(Long.class, "select deploy_id from msc_acme_deploy where domain_id=? and state=?", new Object[]{domainId, CommonState.ENABLED.getValue()}).onSuccess(x -> {
             x.forEach(deployId -> {
                 asyncDeployCert(deployId, certId);
             });
@@ -634,15 +634,15 @@ public class AcmeHelper {
      */
     public static ResponseData<MscAcmeCert> getValidCert(long domainId, Date date) {
         String sql = "SELECT * from msc_acme_cert where domain_id=? and state=? and expire_date>=? and active_date<=? order by id desc";
-        return dao.queryForSingleObject(MscAcmeCert.class, sql, new Object[]{domainId, CommonState.ENABLED.getValue(), date, date});
+        return dao.queryForObject(MscAcmeCert.class, sql, new Object[]{domainId, CommonState.ENABLED.getValue(), date, date});
     }
 
 //    public static void main(String[] args) {
 //        DaoConfigManager.setConfig(new DaoConfig());
 //        ConnectionManager.initConnectionPool("$ROOT_CONN$", "", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://192.168.88.21:3308/uw_gateway", "root", "mysqlRootPassword", null, 1, 10, 600, 1800, 3600);
-//        dao.executeCommand("update msc_acme_account set create_date=now() where id=?",new Object[]{2L});
-//        dao.executeCommand("update msc_acme_account set modify_date=? where id=?",new Object[]{new Date(),2L});
-//        dao.executeCommand("update msc_acme_account set account_desc=? where id=?",new Object[]{"测试一下中文录入！",2L});
+//        dao.execute("update msc_acme_account set create_date=now() where id=?",new Object[]{2L});
+//        dao.execute("update msc_acme_account set modify_date=? where id=?",new Object[]{new Date(),2L});
+//        dao.execute("update msc_acme_account set account_desc=? where id=?",new Object[]{"测试一下中文录入！",2L});
 //
 //        MscAcmeAccount acmeDomain = dao.load(MscAcmeAccount.class,2L).getData();
 //        System.out.println(acmeDomain.toString());

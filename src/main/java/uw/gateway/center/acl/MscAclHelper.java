@@ -7,13 +7,11 @@ import org.apache.commons.lang3.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.client.RestClient;
 import uw.auth.client.conf.AuthClientProperties;
 import uw.cache.CacheDataLoader;
 import uw.cache.FusionCache;
+import uw.common.response.ResponseData;
 import uw.common.util.IpMatchUtils;
 import uw.gateway.center.acl.filter.constant.MscAclFilterType;
 import uw.gateway.center.acl.filter.vo.MscAclFilterInfo;
@@ -25,9 +23,7 @@ import uw.gateway.center.acl.rate.vo.MscAclRateInfo;
 import uw.gateway.center.acl.rate.vo.MscAclRateResult;
 
 import java.net.InetAddress;
-import java.net.URI;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 
@@ -53,18 +49,17 @@ public class MscAclHelper {
      */
     private static LoadingCache<Long, Cache<String, FixedWindowRateLimiter>> rateLimitCache = null;
 
-    public MscAclHelper(AuthClientProperties authClientProperties, RestTemplate authRestTemplate) {
+    public MscAclHelper(AuthClientProperties authClientProperties, RestClient authRestClient) {
         //ip过滤配置缓存。
         FusionCache.config( new FusionCache.Config( MSC_ACL_FILTER, 10000, 86400_000L ), new CacheDataLoader<Long, List<MscAclFilterInfo>>() {
             @Override
             public List<MscAclFilterInfo> load(Long saasId) throws Exception {
-                URI targetUrl = UriComponentsBuilder.fromUriString( authClientProperties.getAuthCenterHost() ).path( "/rpc/gateway/getAclFilterList" ).queryParam( "saasId",
-                        saasId ).build().encode().toUri();
-                CompletableFuture<List<MscAclFilterInfo>> future = CompletableFuture.supplyAsync( () -> authRestTemplate.exchange( targetUrl, HttpMethod.GET, HttpEntity.EMPTY,
-                        new ParameterizedTypeReference<List<MscAclFilterInfo>>() {
-                } ).getBody() );
                 try {
-                    return future.get( 60, TimeUnit.SECONDS );
+                    ResponseData<List<MscAclFilterInfo>> response = authRestClient.get()
+                            .uri( authClientProperties.getAuthCenterHost() + "/rpc/gateway/getAclFilterList?saasId={saasId}", saasId )
+                            .retrieve()
+                            .body( new ParameterizedTypeReference<ResponseData<List<MscAclFilterInfo>>>() {} );
+                    return response != null && response.isSuccess() ? response.getData() : null;
                 } catch (Exception e) {
                     log.error( "getAclFilterList error: {}", e.getMessage(), e );
                     return null;
@@ -76,13 +71,12 @@ public class MscAclHelper {
         FusionCache.config( new FusionCache.Config( MSC_ACL_RATE, 10000, 86400_000L ), new CacheDataLoader<Long, List<MscAclRateInfo>>() {
             @Override
             public List<MscAclRateInfo> load(Long saasId) throws Exception {
-                URI targetUrl =
-                        UriComponentsBuilder.fromUriString( authClientProperties.getAuthCenterHost() ).path( "/rpc/gateway/getAclRateList" ).queryParam( "saasId", saasId ).build().encode().toUri();
-                CompletableFuture<List<MscAclRateInfo>> future = CompletableFuture.supplyAsync( () -> authRestTemplate.exchange( targetUrl, HttpMethod.GET, HttpEntity.EMPTY,
-                        new ParameterizedTypeReference<List<MscAclRateInfo>>() {
-                } ).getBody() );
                 try {
-                    return future.get( 60, TimeUnit.SECONDS );
+                    ResponseData<List<MscAclRateInfo>> response = authRestClient.get()
+                            .uri( authClientProperties.getAuthCenterHost() + "/rpc/gateway/getAclRateList?saasId={saasId}", saasId )
+                            .retrieve()
+                            .body( new ParameterizedTypeReference<ResponseData<List<MscAclRateInfo>>>() {} );
+                    return response != null && response.isSuccess() ? response.getData() : null;
                 } catch (Exception e) {
                     log.error( "getAclRateList error: {}", e.getMessage(), e );
                     return null;

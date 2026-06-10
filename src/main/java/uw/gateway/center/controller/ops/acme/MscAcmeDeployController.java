@@ -18,10 +18,10 @@ import uw.common.app.dto.SysDataHistoryQueryParam;
 import uw.common.app.entity.SysCritLog;
 import uw.common.app.entity.SysDataHistory;
 import uw.common.app.helper.SysDataHistoryHelper;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.gateway.center.acme.AcmeHelper;
 import uw.gateway.center.dto.MscAcmeDeployLogQueryParam;
 import uw.gateway.center.dto.MscAcmeDeployQueryParam;
@@ -49,7 +49,7 @@ public class MscAcmeDeployController {
     @GetMapping("/list")
     @Operation(summary = "列表acme部署", description = "列表acme部署")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<MscAcmeDeploy>> list(MscAcmeDeployQueryParam queryParam) {
+    public ResponseData<PageList<MscAcmeDeploy>> list(MscAcmeDeployQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAcmeDeploy.class);
         return dao.list(MscAcmeDeploy.class, queryParam);
     }
@@ -62,7 +62,7 @@ public class MscAcmeDeployController {
     @GetMapping("/liteList")
     @Operation(summary = "轻量级列表acme部署", description = "轻量级列表acme部署，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<DataList<MscAcmeDeploy>> liteList(MscAcmeDeployQueryParam queryParam) {
+    public ResponseData<PageList<MscAcmeDeploy>> liteList(MscAcmeDeployQueryParam queryParam) {
         queryParam.SELECT_SQL( "SELECT id,saas_id,domain_id,deploy_name,deploy_vendor,last_update,last_active_date,last_expire_date,create_date,modify_date,state from msc_acme_deploy " );
         return dao.list(MscAcmeDeploy.class, queryParam);
     }
@@ -77,7 +77,7 @@ public class MscAcmeDeployController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public ResponseData<MscAcmeDeploy> load(@Parameter(description = "主键ID", required = true) @RequestParam long id) {
         AuthServiceHelper.logRef(MscAcmeDeploy.class, id);
-        return dao.queryForSingleObject(MscAcmeDeploy.class, new AuthIdQueryParam(id));
+        return dao.queryForObject(MscAcmeDeploy.class, new AuthIdQueryParam(id));
     }
 
     /**
@@ -89,7 +89,7 @@ public class MscAcmeDeployController {
     @GetMapping("/listLog")
     @Operation(summary = "列表acme部署日志", description = "列表acme部署日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<MscAcmeDeployLog>> listLog(MscAcmeDeployLogQueryParam queryParam) {
+    public ResponseData<PageList<MscAcmeDeployLog>> listLog(MscAcmeDeployLogQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAcmeDeployLog.class);
         return dao.list(MscAcmeDeployLog.class, queryParam);
     }
@@ -103,7 +103,7 @@ public class MscAcmeDeployController {
     @GetMapping("/listDataHistory")
     @Operation(summary = "查询数据历史", description = "查询数据历史")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysDataHistory>> listDataHistory(SysDataHistoryQueryParam queryParam) {
+    public ResponseData<PageList<SysDataHistory>> listDataHistory(SysDataHistoryQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAcmeDeploy.class, queryParam.getEntityId());
         queryParam.setEntityClass(MscAcmeDeploy.class);
         return dao.list(SysDataHistory.class, queryParam);
@@ -118,7 +118,7 @@ public class MscAcmeDeployController {
     @GetMapping("/listCritLog")
     @Operation(summary = "查询操作日志", description = "查询操作日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
+    public ResponseData<PageList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAcmeDeploy.class, queryParam.getBizId());
         queryParam.setBizTypeClass(MscAcmeDeploy.class);
         return dao.list(SysCritLog.class, queryParam);
@@ -134,7 +134,7 @@ public class MscAcmeDeployController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<?> applyCert(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "证书ID") @RequestParam long certId, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAcmeDeploy.class, id, remark);
-        return dao.queryForSingleObject(MscAcmeDeploy.class, new AuthIdQueryParam(id)).onSuccess(mscAcmeDeployDb -> {
+        return dao.queryForObject(MscAcmeDeploy.class, new AuthIdQueryParam(id)).onSuccess(mscAcmeDeployDb -> {
             //尝试加锁，先锁定180S.
             long lockStamp = GlobalLocker.tryLock("AcmeDeployCert", id, 180_000L);
             if (lockStamp == 0) {
@@ -180,7 +180,7 @@ public class MscAcmeDeployController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<MscAcmeDeploy> update(@RequestBody MscAcmeDeploy mscAcmeDeploy, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAcmeDeploy.class, mscAcmeDeploy.getId(), remark);
-        return dao.queryForSingleObject(MscAcmeDeploy.class, new AuthIdQueryParam(mscAcmeDeploy.getId())).onSuccess(mscAcmeDeployDb -> {
+        return dao.queryForObject(MscAcmeDeploy.class, new AuthIdQueryParam(mscAcmeDeploy.getId())).onSuccess(mscAcmeDeployDb -> {
             mscAcmeDeployDb.setDomainId(mscAcmeDeploy.getDomainId());
             mscAcmeDeployDb.setDeployName(mscAcmeDeploy.getDeployName());
             mscAcmeDeployDb.setDeployDesc(mscAcmeDeploy.getDeployDesc());

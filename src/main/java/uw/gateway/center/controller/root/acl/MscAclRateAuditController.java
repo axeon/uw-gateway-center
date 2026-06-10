@@ -10,10 +10,10 @@ import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonResponseCode;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.gateway.center.acl.MscAclHelper;
 import uw.gateway.center.constant.AclAuditState;
 import uw.gateway.center.dto.MscAclRateQueryParam;
@@ -41,7 +41,7 @@ public class MscAclRateAuditController {
     @GetMapping("/list")
     @Operation(summary = "列表系统流控配置", description = "列表系统流控配置")
     @MscPermDeclare(user = UserType.ROOT, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<MscAclRate>> list(MscAclRateQueryParam queryParam) {
+    public ResponseData<PageList<MscAclRate>> list(MscAclRateQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAclRate.class);
         return dao.list(MscAclRate.class, queryParam);
     }

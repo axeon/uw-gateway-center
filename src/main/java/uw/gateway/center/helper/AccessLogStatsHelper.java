@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import uw.cache.CacheDataLoader;
 import uw.cache.FusionCache;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.DateUtils;
 import uw.common.util.JsonUtils;
 import uw.common.util.SystemClock;

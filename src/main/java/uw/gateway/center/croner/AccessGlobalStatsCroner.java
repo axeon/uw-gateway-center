@@ -1,7 +1,7 @@
 package uw.gateway.center.croner;
 
 import org.springframework.stereotype.Component;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.DateUtils;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;

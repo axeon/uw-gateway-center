@@ -9,9 +9,9 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.gateway.center.dto.AccessGlobalStatsQueryParam;
 import uw.gateway.center.entity.AccessGlobalStats;
 import uw.gateway.center.helper.AccessLogStatsHelper;
@@ -35,7 +35,7 @@ public class DashboardController {
     @GetMapping("/listGlobalStats")
     @Operation(summary = "列表全局统计信息", description = "列表全局统计信息")
     @MscPermDeclare(user = UserType.ROOT, auth = AuthType.PERM, log = ActionLog.NONE)
-    public ResponseData<DataList<AccessGlobalStats>> listGlobalStats(AccessGlobalStatsQueryParam queryParam) {
+    public ResponseData<PageList<AccessGlobalStats>> listGlobalStats(AccessGlobalStatsQueryParam queryParam) {
         return dao.list(AccessGlobalStats.class, queryParam);
     }
 

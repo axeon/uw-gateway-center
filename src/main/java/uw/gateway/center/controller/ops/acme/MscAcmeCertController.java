@@ -13,10 +13,10 @@ import uw.common.app.constant.CommonState;
 import uw.common.app.dto.AuthIdQueryParam;
 import uw.common.app.dto.AuthIdStateQueryParam;
 import uw.common.app.helper.SysDataHistoryHelper;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.gateway.center.acme.AcmeHelper;
 import uw.gateway.center.dto.MscAcmeCertQueryParam;
 import uw.gateway.center.entity.MscAcmeCert;
@@ -43,7 +43,7 @@ public class MscAcmeCertController {
     @GetMapping("/list")
     @Operation(summary = "列表acme证书", description = "列表acme证书")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<MscAcmeCert>> list(MscAcmeCertQueryParam queryParam) {
+    public ResponseData<PageList<MscAcmeCert>> list(MscAcmeCertQueryParam queryParam) {
         AuthServiceHelper.logRef(MscAcmeCert.class);
         return dao.list(MscAcmeCert.class, queryParam);
     }
@@ -56,7 +56,7 @@ public class MscAcmeCertController {
     @GetMapping("/liteList")
     @Operation(summary = "轻量级列表acme证书", description = "轻量级列表acme证书，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<DataList<MscAcmeCert>> liteList(MscAcmeCertQueryParam queryParam) {
+    public ResponseData<PageList<MscAcmeCert>> liteList(MscAcmeCertQueryParam queryParam) {
         queryParam.SELECT_SQL("SELECT id,saas_id,domain_id,domain_name,domain_alias,cert_alg,active_date,expire_date,create_date,modify_date,state from msc_acme_cert ");
         return dao.list(MscAcmeCert.class, queryParam);
     }
@@ -71,7 +71,7 @@ public class MscAcmeCertController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public ResponseData<MscAcmeCert> load(@Parameter(description = "主键ID", required = true) @RequestParam long id) {
         AuthServiceHelper.logRef(MscAcmeCert.class, id);
-        return dao.queryForSingleObject(MscAcmeCert.class, new AuthIdQueryParam(id));
+        return dao.queryForObject(MscAcmeCert.class, new AuthIdQueryParam(id));
     }
 
     /**

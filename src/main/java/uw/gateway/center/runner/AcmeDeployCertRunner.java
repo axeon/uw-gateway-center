@@ -1,7 +1,7 @@
 package uw.gateway.center.runner;
 
 import org.springframework.stereotype.Component;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.gateway.center.acme.AcmeHelper;
 import uw.gateway.center.entity.MscAcmeDeployLog;
 import uw.gateway.center.helper.DingSendService;

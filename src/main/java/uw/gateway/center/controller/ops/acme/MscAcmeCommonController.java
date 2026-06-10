@@ -10,7 +10,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.gateway.center.acme.*;
 import uw.gateway.center.entity.MscAcmeAccount;
 
