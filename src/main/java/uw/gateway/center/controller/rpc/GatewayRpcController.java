@@ -91,9 +91,9 @@ public class GatewayRpcController {
     public ResponseData<List<MscAcmeCert>> getSslCertList() {
         Date now = SystemClock.nowDate();
         String sql = "SELECT * from msc_acme_cert where state=? and expire_date>=? and active_date<=? order by id desc";
-        return dao.list(MscAcmeCert.class, sql, new Object[]{CommonState.ENABLED.getValue(), now, now}).onSuccess(datalist -> {
+        return dao.list(MscAcmeCert.class, sql, new Object[]{CommonState.ENABLED.getValue(), now, now}).onSuccess(pageList -> {
             // 排重后获取每个域名的最新证书。
-            var list = new ArrayList<>(datalist.stream().collect(Collectors.toMap(MscAcmeCert::getDomainId, x -> x, (existingValue, newValue) -> {
+            var list = new ArrayList<>(pageList.stream().collect(Collectors.toMap(MscAcmeCert::getDomainId, x -> x, (existingValue, newValue) -> {
                 if (existingValue.getExpireDate().compareTo(newValue.getExpireDate()) > 0) {
                     return existingValue;
                 } else {
