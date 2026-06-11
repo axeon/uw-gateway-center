@@ -5,7 +5,6 @@ import uw.common.app.dto.AuthPageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,17 +21,17 @@ public class MscAcmeAccountQueryParam extends AuthPageQueryParam{
         super(saasId);
     }
 	
-    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
-            put( "id", "id" );
-            put( "saasId", "saas_id" );
-            put( "accountName", "account_name" );
-            put( "accountCertAlg", "account_cert_alg" );
-            put( "eabId", "eab_id" );
-            put( "eabKey", "eab_key" );
-            put( "createDate", "create_date" );
-            put( "modifyDate", "modify_date" );
-            put( "state", "state" );
-    }};
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+        Map.entry("id", "id"),
+        Map.entry("saasId", "saas_id"),
+        Map.entry("accountName", "account_name"),
+        Map.entry("accountCertAlg", "account_cert_alg"),
+        Map.entry("eabId", "eab_id"),
+        Map.entry("eabKey", "eab_key"),
+        Map.entry("createDate", "create_date"),
+        Map.entry("modifyDate", "modify_date"),
+        Map.entry("state", "state")
+);
 
     /**
      * 允许的排序属性。

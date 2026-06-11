@@ -5,7 +5,6 @@ import uw.common.app.dto.AuthPageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,25 +21,25 @@ public class AccessSaasStatsQueryParam extends AuthPageQueryParam{
         super(saasId);
     }
 	
-    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
-            put( "id", "id" );
-            put( "saasId", "saas_id" );
-            put( "statsDate", "stats_date" );
-            put( "createDate", "create_date" );
-            put( "userNum", "user_num" );
-            put( "ipNum", "ip_num" );
-            put( "sessionNum", "session_num" );
-            put( "serviceNum", "service_num" );
-            put( "apiNum", "api_num" );
-            put( "requestNum", "request_num" );
-            put( "requestSize", "request_size" );
-            put( "responseSize", "response_size" );
-            put( "responseMillis", "response_millis" );
-            put( "response500", "response_500" );
-            put( "response404", "response_404" );
-            put( "response401", "response_401" );
-            put( "response403", "response_403" );
-    }};
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+        Map.entry("id", "id"),
+        Map.entry("saasId", "saas_id"),
+        Map.entry("statsDate", "stats_date"),
+        Map.entry("createDate", "create_date"),
+        Map.entry("userNum", "user_num"),
+        Map.entry("ipNum", "ip_num"),
+        Map.entry("sessionNum", "session_num"),
+        Map.entry("serviceNum", "service_num"),
+        Map.entry("apiNum", "api_num"),
+        Map.entry("requestNum", "request_num"),
+        Map.entry("requestSize", "request_size"),
+        Map.entry("responseSize", "response_size"),
+        Map.entry("responseMillis", "response_millis"),
+        Map.entry("response500", "response_500"),
+        Map.entry("response404", "response_404"),
+        Map.entry("response401", "response_401"),
+        Map.entry("response403", "response_403")
+);
 
     /**
      * 允许的排序属性。

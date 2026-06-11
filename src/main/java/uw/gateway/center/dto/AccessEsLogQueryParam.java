@@ -5,7 +5,6 @@ import uw.common.app.dto.AuthPageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -141,10 +140,10 @@ public class AccessEsLogQueryParam extends AuthPageQueryParam {
     @Schema(title = "创建时间范围", description = "创建时间范围")
     private Date[] requestDateRange;
 
-    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
-            put( "id", "id" );
-            put("@timestamp","\\\"@timestamp\\\"");
-    }};
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+        Map.entry("id", "id"),
+        Map.entry("@timestamp", "\\\"@timestamp\\\"")
+);
 
     /**
      * 允许的排序属性。

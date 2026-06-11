@@ -5,7 +5,6 @@ import uw.common.app.dto.AuthPageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,35 +21,35 @@ public class MscAclRateQueryParam extends AuthPageQueryParam{
         super(saasId);
     }
 	
-    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
-            put( "id", "id" );
-            put( "saasId", "saas_id" );
-            put( "saasLevel", "saas_level" );
-            put( "userId", "user_id" );
-            put( "userType", "user_type" );
-            put( "limitName", "limit_name" );
-            put( "limitDesc", "limit_desc" );
-            put( "limitType", "limit_type" );
-            put( "limitUri", "limit_uri" );
-            put( "limitSeconds", "limit_seconds" );
-            put( "limitRequests", "limit_requests" );
-            put( "limitBytes", "limit_bytes" );
-            put( "applyUserId", "apply_user_id" );
-            put( "applyUserIp", "apply_user_ip" );
-            put( "applyUserInfo", "apply_user_info" );
-            put( "applyRemark", "apply_remark" );
-            put( "applyDate", "apply_date" );
-            put( "auditUserId", "audit_user_id" );
-            put( "auditUserIp", "audit_user_ip" );
-            put( "auditUserInfo", "audit_user_info" );
-            put( "auditRemark", "audit_remark" );
-            put( "auditDate", "audit_date" );
-            put( "auditState", "audit_state" );
-            put( "expireDate", "expire_date" );
-            put( "createDate", "create_date" );
-            put( "modifyDate", "modify_date" );
-            put( "state", "state" );
-    }};
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+        Map.entry("id", "id"),
+        Map.entry("saasId", "saas_id"),
+        Map.entry("saasLevel", "saas_level"),
+        Map.entry("userId", "user_id"),
+        Map.entry("userType", "user_type"),
+        Map.entry("limitName", "limit_name"),
+        Map.entry("limitDesc", "limit_desc"),
+        Map.entry("limitType", "limit_type"),
+        Map.entry("limitUri", "limit_uri"),
+        Map.entry("limitSeconds", "limit_seconds"),
+        Map.entry("limitRequests", "limit_requests"),
+        Map.entry("limitBytes", "limit_bytes"),
+        Map.entry("applyUserId", "apply_user_id"),
+        Map.entry("applyUserIp", "apply_user_ip"),
+        Map.entry("applyUserInfo", "apply_user_info"),
+        Map.entry("applyRemark", "apply_remark"),
+        Map.entry("applyDate", "apply_date"),
+        Map.entry("auditUserId", "audit_user_id"),
+        Map.entry("auditUserIp", "audit_user_ip"),
+        Map.entry("auditUserInfo", "audit_user_info"),
+        Map.entry("auditRemark", "audit_remark"),
+        Map.entry("auditDate", "audit_date"),
+        Map.entry("auditState", "audit_state"),
+        Map.entry("expireDate", "expire_date"),
+        Map.entry("createDate", "create_date"),
+        Map.entry("modifyDate", "modify_date"),
+        Map.entry("state", "state")
+);
 
     /**
      * 允许的排序属性。

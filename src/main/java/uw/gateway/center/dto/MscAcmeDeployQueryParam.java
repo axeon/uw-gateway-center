@@ -5,7 +5,6 @@ import uw.common.app.dto.AuthPageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,19 +21,19 @@ public class MscAcmeDeployQueryParam extends AuthPageQueryParam{
         super(saasId);
     }
 	
-    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
-            put( "id", "id" );
-            put( "saasId", "saas_id" );
-            put( "domainId", "domain_id" );
-            put( "deployName", "deploy_name" );
-            put( "deployVendor", "deploy_vendor" );
-            put( "lastUpdate", "last_update" );
-            put( "lastActiveDate", "last_active_date" );
-            put( "lastExpireDate", "last_expire_date" );
-            put( "createDate", "create_date" );
-            put( "modifyDate", "modify_date" );
-            put( "state", "state" );
-    }};
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+        Map.entry("id", "id"),
+        Map.entry("saasId", "saas_id"),
+        Map.entry("domainId", "domain_id"),
+        Map.entry("deployName", "deploy_name"),
+        Map.entry("deployVendor", "deploy_vendor"),
+        Map.entry("lastUpdate", "last_update"),
+        Map.entry("lastActiveDate", "last_active_date"),
+        Map.entry("lastExpireDate", "last_expire_date"),
+        Map.entry("createDate", "create_date"),
+        Map.entry("modifyDate", "modify_date"),
+        Map.entry("state", "state")
+);
 
     /**
      * 允许的排序属性。
