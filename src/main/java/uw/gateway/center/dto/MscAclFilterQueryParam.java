@@ -178,29 +178,29 @@ public class MscAclFilterQueryParam extends AuthPageQueryParam {
     }
 
     private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
-        Map.entry("id", "id"),
-        Map.entry("saasId", "saas_id"),
-        Map.entry("userId", "user_id"),
-        Map.entry("userType", "user_type"),
-        Map.entry("filterType", "filter_type"),
-        Map.entry("filterName", "filter_name"),
-        Map.entry("filterDesc", "filter_desc"),
-        Map.entry("applyUserId", "apply_user_id"),
-        Map.entry("applyUserIp", "apply_user_ip"),
-        Map.entry("applyUserInfo", "apply_user_info"),
-        Map.entry("applyRemark", "apply_remark"),
-        Map.entry("applyDate", "apply_date"),
-        Map.entry("auditUserId", "audit_user_id"),
-        Map.entry("auditUserIp", "audit_user_ip"),
-        Map.entry("auditUserInfo", "audit_user_info"),
-        Map.entry("auditRemark", "audit_remark"),
-        Map.entry("auditDate", "audit_date"),
-        Map.entry("auditState", "audit_state"),
-        Map.entry("expireDate", "expire_date"),
-        Map.entry("createDate", "create_date"),
-        Map.entry("modifyDate", "modify_date"),
-        Map.entry("state", "state")
-);
+            Map.entry("id", "id"),
+            Map.entry("saasId", "saas_id"),
+            Map.entry("userId", "user_id"),
+            Map.entry("userType", "user_type"),
+            Map.entry("filterType", "filter_type"),
+            Map.entry("filterName", "filter_name"),
+            Map.entry("filterDesc", "filter_desc"),
+            Map.entry("applyUserId", "apply_user_id"),
+            Map.entry("applyUserIp", "apply_user_ip"),
+            Map.entry("applyUserInfo", "apply_user_info"),
+            Map.entry("applyRemark", "apply_remark"),
+            Map.entry("applyDate", "apply_date"),
+            Map.entry("auditUserId", "audit_user_id"),
+            Map.entry("auditUserIp", "audit_user_ip"),
+            Map.entry("auditUserInfo", "audit_user_info"),
+            Map.entry("auditRemark", "audit_remark"),
+            Map.entry("auditDate", "audit_date"),
+            Map.entry("auditState", "audit_state"),
+            Map.entry("expireDate", "expire_date"),
+            Map.entry("createDate", "create_date"),
+            Map.entry("modifyDate", "modify_date"),
+            Map.entry("state", "state")
+    );
 
     /**
      * 允许的排序属性。
@@ -764,6 +764,7 @@ public class MscAclFilterQueryParam extends AuthPageQueryParam {
 
     /**
      * 获取数据查询参数。
+     *
      * @return
      */
     public DataQueryParam getDataQueryParam() {
@@ -772,6 +773,7 @@ public class MscAclFilterQueryParam extends AuthPageQueryParam {
 
     /**
      * 设置数据查询参数。
+     *
      * @param dataQueryParam
      */
     public void setDataQueryParam(DataQueryParam dataQueryParam) {
@@ -780,6 +782,7 @@ public class MscAclFilterQueryParam extends AuthPageQueryParam {
 
     /**
      * 设置数据查询参数。
+     *
      * @param dataQueryParam
      * @return
      */
@@ -947,6 +950,12 @@ public class MscAclFilterQueryParam extends AuthPageQueryParam {
             super(saasId);
         }
 
+        private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+                Map.entry("id", "id"),
+                Map.entry("createDate", "create_date"),
+                Map.entry("modifyDate", "modify_date")
+        );
+
         /**
          * 允许的排序属性。
          * key:排序名 value:排序字段
@@ -955,29 +964,7 @@ public class MscAclFilterQueryParam extends AuthPageQueryParam {
          */
         @Override
         public Map<String, String> ALLOWED_SORT_PROPERTY() {
-            return new HashMap<>() {{
-                put("id", "id");
-                put("saasId", "saas_id");
-                put("filterId", "filter_id");
-                put("ipInfo", "ip_info");
-                put("ipStart", "ip_start");
-                put("ipEnd", "ip_end");
-                put("applyUserId", "apply_user_id");
-                put("applyUserIp", "apply_user_ip");
-                put("applyUserInfo", "apply_user_info");
-                put("applyRemark", "apply_remark");
-                put("applyDate", "apply_date");
-                put("auditUserId", "audit_user_id");
-                put("auditUserIp", "audit_user_ip");
-                put("auditUserInfo", "audit_user_info");
-                put("auditRemark", "audit_remark");
-                put("auditDate", "audit_date");
-                put("auditState", "audit_state");
-                put("expireDate", "expire_date");
-                put("createDate", "create_date");
-                put("modifyDate", "modify_date");
-                put("state", "state");
-            }};
+            return ALLOWED_SORT_PROPERTY;
         }
 
         /**
