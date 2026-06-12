@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.springframework.web.util.UriUtils;
 import uw.common.app.vo.JsonConfigBox;
 import uw.common.app.vo.JsonConfigParam;
@@ -162,7 +163,7 @@ public class AliDnsVendor implements DnsVendor {
         }
         Map<String, String> resultMap = JsonUtils.parse(httpData.getResponseData(), new TypeReference<Map<String, String>>() {
         });
-        if (StringUtils.equals(resultMap.get("RecordId"), recordId)) {
+        if (Strings.CS.equals(resultMap.get("RecordId"), recordId)) {
             return ResponseData.success(recordId);
         } else {
             return ResponseData.warnMsg("Failed to remove DNS record: " + httpData.getResponseData());

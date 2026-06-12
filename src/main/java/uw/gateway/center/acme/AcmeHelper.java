@@ -2,6 +2,7 @@ package uw.gateway.center.acme;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.shredzone.acme4j.*;
 import org.shredzone.acme4j.challenge.Dns01Challenge;
@@ -205,12 +206,12 @@ public class AcmeHelper {
         // 获取密钥对。
         KeyPair accountKeyPair = pemToKeyPair(acmeAccount.getAccountCertKey());
         //手工托管无法自动申请证书！
-        if (StringUtils.isBlank(acmeDomain.getAcmeVendor()) || StringUtils.equals(acmeDomain.getAcmeVendor(), AcmeVendor.DEFAULT.getCode())) {
+        if (StringUtils.isBlank(acmeDomain.getAcmeVendor()) || Strings.CS.equals(acmeDomain.getAcmeVendor(), AcmeVendor.DEFAULT.getCode())) {
             slog.log("手工托管无法自动申请证书！");
             return ResponseData.errorMsg("手工托管无法自动申请证书！");
         }
         //  获取DNS供应商。
-        if (StringUtils.isBlank(acmeDomain.getDnsVendor()) || StringUtils.equals(acmeDomain.getDnsVendor(), DefaultDnsVendor.class.getName())) {
+        if (StringUtils.isBlank(acmeDomain.getDnsVendor()) || Strings.CS.equals(acmeDomain.getDnsVendor(), DefaultDnsVendor.class.getName())) {
             slog.log("手工托管DNS无法自动申请证书！");
             return ResponseData.errorMsg("手工托管DNS无法自动申请证书！");
         }
@@ -394,11 +395,11 @@ public class AcmeHelper {
         }
         MscAcmeDomain acmeDomain = domainResponse.getData();
         //手工托管无法自动申请证书！
-        if (StringUtils.isBlank(acmeDomain.getAcmeVendor()) || StringUtils.equals(acmeDomain.getAcmeVendor(), AcmeVendor.DEFAULT.getCode())) {
+        if (StringUtils.isBlank(acmeDomain.getAcmeVendor()) || Strings.CS.equals(acmeDomain.getAcmeVendor(), AcmeVendor.DEFAULT.getCode())) {
             return false;
         }
         //  获取DNS供应商。
-        if (StringUtils.isBlank(acmeDomain.getDnsVendor()) || StringUtils.equals(acmeDomain.getDnsVendor(), DefaultDnsVendor.class.getName())) {
+        if (StringUtils.isBlank(acmeDomain.getDnsVendor()) || Strings.CS.equals(acmeDomain.getDnsVendor(), DefaultDnsVendor.class.getName())) {
             return false;
         }
         return true;
