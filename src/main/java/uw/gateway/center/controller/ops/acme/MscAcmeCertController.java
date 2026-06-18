@@ -53,10 +53,10 @@ public class MscAcmeCertController {
      *
      * @return
      */
-    @GetMapping("/liteList")
+    @GetMapping("/listLite")
     @Operation(summary = "轻量级列表acme证书", description = "轻量级列表acme证书，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<PageList<MscAcmeCert>> liteList(MscAcmeCertQueryParam queryParam) {
+    public ResponseData<PageList<MscAcmeCert>> listLite(MscAcmeCertQueryParam queryParam) {
         queryParam.SELECT_SQL("SELECT id,saas_id,domain_id,domain_name,domain_alias,cert_alg,active_date,expire_date,create_date,modify_date,state from msc_acme_cert ");
         return dao.list(MscAcmeCert.class, queryParam);
     }

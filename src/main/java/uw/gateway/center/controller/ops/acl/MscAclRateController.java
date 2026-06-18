@@ -55,10 +55,10 @@ public class MscAclRateController {
      *
      * @return
      */
-    @GetMapping("/liteList")
+    @GetMapping("/listLite")
     @Operation(summary = "轻量级列表系统流控配置", description = "轻量级列表系统流控配置，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<PageList<MscAclRate>> liteList(MscAclRateQueryParam queryParam) {
+    public ResponseData<PageList<MscAclRate>> listLite(MscAclRateQueryParam queryParam) {
         queryParam.SELECT_SQL("SELECT id,saas_id,user_id,limit_type,limit_uri,limit_seconds,limit_requests,limit_bytes,remark,create_date,modify_date,state from msc_acl_rate ");
         return dao.list(MscAclRate.class, queryParam);
     }

@@ -59,10 +59,10 @@ public class MscAcmeDeployController {
      *
      * @return
      */
-    @GetMapping("/liteList")
+    @GetMapping("/listLite")
     @Operation(summary = "轻量级列表acme部署", description = "轻量级列表acme部署，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<PageList<MscAcmeDeploy>> liteList(MscAcmeDeployQueryParam queryParam) {
+    public ResponseData<PageList<MscAcmeDeploy>> listLite(MscAcmeDeployQueryParam queryParam) {
         queryParam.SELECT_SQL( "SELECT id,saas_id,domain_id,deploy_name,deploy_vendor,last_update,last_active_date,last_expire_date,create_date,modify_date,state from msc_acme_deploy " );
         return dao.list(MscAcmeDeploy.class, queryParam);
     }

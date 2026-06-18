@@ -56,10 +56,10 @@ public class MscAcmeAccountController {
      *
      * @return
      */
-    @GetMapping("/liteList")
+    @GetMapping("/listLite")
     @Operation(summary = "轻量级列表acme账号", description = "轻量级列表acme账号，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<PageList<MscAcmeAccount>> liteList(MscAcmeAccountQueryParam queryParam) {
+    public ResponseData<PageList<MscAcmeAccount>> listLite(MscAcmeAccountQueryParam queryParam) {
         queryParam.SELECT_SQL("SELECT id,saas_id,account_name,create_date,modify_date,state from msc_acme_account ");
         return dao.list(MscAcmeAccount.class, queryParam);
     }

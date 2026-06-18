@@ -57,10 +57,10 @@ public class MscAcmeDomainController {
      *
      * @return
      */
-    @GetMapping("/liteList")
+    @GetMapping("/listLite")
     @Operation(summary = "轻量级列表acme域名", description = "轻量级列表acme域名，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<PageList<MscAcmeDomain>> liteList(MscAcmeDomainQueryParam queryParam) {
+    public ResponseData<PageList<MscAcmeDomain>> listLite(MscAcmeDomainQueryParam queryParam) {
         queryParam.SELECT_SQL( "SELECT id,saas_id,account_id,domain_name,domain_cert_alg,acme_vendor,dns_vendor,last_update,last_active_date,last_expire_date,create_date,modify_date,state from msc_acme_domain " );
         return dao.list(MscAcmeDomain.class, queryParam);
     }

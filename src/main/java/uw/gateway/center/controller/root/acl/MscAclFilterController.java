@@ -75,10 +75,10 @@ public class MscAclFilterController {
      *
      * @return
      */
-    @GetMapping("/liteList")
+    @GetMapping("/listLite")
     @Operation(summary = "轻量级列表IP过滤器", description = "轻量级列表IP过滤器，一般用于select控件。")
     @MscPermDeclare(user = UserType.ROOT, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<PageList<MscAclFilter>> liteList(MscAclFilterQueryParam queryParam) {
+    public ResponseData<PageList<MscAclFilter>> listLite(MscAclFilterQueryParam queryParam) {
         queryParam.SELECT_SQL("SELECT id,saas_id,user_id,user_type,filter_type,filter_name,filter_desc,create_date,modify_date,state from msc_acl_filter ");
         return dao.list(MscAclFilter.class, queryParam);
     }
