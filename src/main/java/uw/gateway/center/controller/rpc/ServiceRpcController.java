@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,11 +19,10 @@ import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.gateway.center.acl.MscAclHelper;
+import uw.gateway.center.acl.rate.constant.MscAclRateLimitType;
 import uw.gateway.center.constant.AclAuditState;
-import uw.gateway.center.constant.RateLimitType;
 import uw.gateway.center.entity.MscAclRate;
-
-import java.util.Date;
+import uw.gateway.center.vo.SaasRateLimitParam;
 
 /**
  * 网关客户端RPC接口。
@@ -46,23 +46,69 @@ public class ServiceRpcController {
      * @param remark
      * @return
      */
+    /**
+     * 更新运营商限速设置。
+     *
+     * @param param 限速策略参数（限速维度由 limitType 决定，userType/userId 仅按用户维度限速时使用）
+     * @return 操作结果
+     */
     @PutMapping("/updateSaasRateLimit")
     @Operation(summary = "更新运营商限速设置", description = "更新运营商限速设置")
     @MscPermDeclare(user = UserType.RPC, log = ActionLog.CRIT)
-    public ResponseData updateSaasRateLimit(@Parameter(description = "saasId") @RequestParam long saasId, @Parameter(description = "限制秒数", example = "10") @RequestParam int limitSeconds, @Parameter(description = "限制请求书", example = "1000") @RequestParam int limitRequests, @Parameter(description = "限制字节数", example = "500000") @RequestParam int limitBytes, @Parameter(description = "过期时间") @RequestParam Date expireDate, @Parameter(description = "备注") @RequestParam String remark) {
-        AuthServiceHelper.logInfo(MscAclRate.class, 0, "更新运营商[" + saasId + "]限速设置！操作备注：" + remark);
+    public ResponseData updateSaasRateLimit(@RequestBody SaasRateLimitParam param) {
+        // ===== 参数全面校验，任一不合法直接返回，不记审计日志、不落库 =====
+        if (param == null) {
+            return ResponseData.errorMsg("param不能为空！");
+        }
+        if (param.getSaasId() <= 0) {
+            return ResponseData.errorMsg("saasId必须大于0！");
+        }
+        if (!MscAclRateLimitType.isValidValue(param.getLimitType())) {
+            return ResponseData.errorMsg("limitType非法！合法值: -1不限速/0 IP/1 SAAS_LEVEL/2 USER_TYPE/3 USER_ID/11 SAAS_LEVEL_URI/12 USER_TYPE_URI/13 USER_ID_URI");
+        }
+        // 按用户维度限速时，userType/userId 必须提供；非用户维度时强制归 -1，避免脏数据干扰匹配
+        if (MscAclRateLimitType.findByValue(param.getLimitType()).isUserDimension()) {
+            if (param.getUserType() < 0) {
+                return ResponseData.errorMsg("按用户维度限速时userType必须大于等于0！");
+            }
+            if (param.getUserId() <= 0) {
+                return ResponseData.errorMsg("按用户维度限速时userId必须大于0！");
+            }
+        } else {
+            param.setUserType(-1);
+            param.setUserId(-1L);
+        }
+        // NONE(-1) 表示不限速，此时窗口/配额无意义；其余类型要求至少限定请求数或字节数
+        if (param.getLimitType() != MscAclRateLimitType.NONE.getValue()) {
+            if (param.getLimitSeconds() <= 0) {
+                return ResponseData.errorMsg("limitSeconds必须大于0！");
+            }
+            if (param.getLimitRequests() <= 0 && param.getLimitBytes() <= 0) {
+                return ResponseData.errorMsg("limitRequests与limitBytes至少有一个必须大于0！");
+            }
+        }
+        if (param.getExpireDate() == null) {
+            return ResponseData.errorMsg("expireDate不能为空！");
+        }
+        if (param.getExpireDate().before(SystemClock.nowDate())) {
+            return ResponseData.errorMsg("expireDate必须晚于当前时间！");
+        }
+        if (param.getRemark() == null || param.getRemark().isBlank()) {
+            return ResponseData.errorMsg("remark不能为空！");
+        }
+        AuthServiceHelper.logInfo(MscAclRate.class, 0, "更新运营商[" + param.getSaasId() + "]限速设置！操作备注：" + param.getRemark());
         MscAclRate mscAclRate = new MscAclRate();
         long id = dao.getSequenceId(MscAclRate.class);
         mscAclRate.setId(id);
-        mscAclRate.setSaasId(saasId);
-        mscAclRate.setUserType(-1);
-        mscAclRate.setUserId(-1L);
-        mscAclRate.setLimitType(RateLimitType.SAAS.getValue());
+        mscAclRate.setSaasId(param.getSaasId());
+        mscAclRate.setUserType(param.getUserType());
+        mscAclRate.setUserId(param.getUserId());
+        mscAclRate.setLimitType(param.getLimitType());
         mscAclRate.setLimitUri(null);
-        mscAclRate.setLimitSeconds(limitSeconds);
-        mscAclRate.setLimitRequests(limitRequests);
-        mscAclRate.setLimitBytes(limitBytes);
-        mscAclRate.setExpireDate(expireDate);
+        mscAclRate.setLimitSeconds(param.getLimitSeconds());
+        mscAclRate.setLimitRequests(param.getLimitRequests());
+        mscAclRate.setLimitBytes(param.getLimitBytes());
+        mscAclRate.setExpireDate(param.getExpireDate());
         mscAclRate.setCreateDate(SystemClock.nowDate());
         mscAclRate.setModifyDate(null);
         mscAclRate.setState(CommonState.ENABLED.getValue());
@@ -81,7 +127,7 @@ public class ServiceRpcController {
         mscAclRate.setAuditState(AclAuditState.CONFIRM.getValue());
         dao.save(mscAclRate);
         //更新缓存
-        MscAclHelper.invalidateAclRateCache(saasId);
+        MscAclHelper.invalidateAclRateCache(param.getSaasId());
         return ResponseData.success();
     }
 

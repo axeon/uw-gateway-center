@@ -18,6 +18,14 @@ import uw.task.entity.TaskCronerLog;
 
 import java.util.Date;
 
+/**
+ * ACME 证书续期定时任务。
+ * <p>
+ * 定期扫描即将过期（默认提前 15 天）的 SSL 证书：支持 ACME 自动续期的域名投递续期任务，
+ * 不支持自动续期的（手工托管）则发送钉钉告警提醒人工更新。
+ *
+ * @author axeon
+ */
 @Component
 public class AcmeOrderCroner extends TaskCroner {
 

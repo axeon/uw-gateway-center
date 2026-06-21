@@ -141,6 +141,11 @@ public class RequestDeviceUtils {
             this.type = type;
         }
 
+        /**
+         * 获取设备类型的数值编码。
+         *
+         * @return 设备类型编码
+         */
         public int type() {
             return type;
         }

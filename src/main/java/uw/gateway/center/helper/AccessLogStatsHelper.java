@@ -518,9 +518,14 @@ public class AccessLogStatsHelper {
         }
         List<AccessSaasStats> saasStatsList = new ArrayList<>();
         saasMap.forEach((saasId, saasStatsMap) -> {
-            AccessSaasStats saasStats = JsonUtils.convert(saasStatsMap, AccessSaasStats.class);
-            saasStats.setSaasId(Long.parseLong(saasId));
-            saasStatsList.add(saasStats);
+            try {
+                AccessSaasStats saasStats = JsonUtils.convert(saasStatsMap, AccessSaasStats.class);
+                saasStats.setSaasId(Long.parseLong(saasId));
+                saasStatsList.add(saasStats);
+            } catch (NumberFormatException e) {
+                // 跳过脏数据（bucket key 非数字），单条损坏不影响整体统计。
+                log.warn("saasStats跳过非法saasId bucket: {}", saasId);
+            }
         });
         return ResponseData.success(saasStatsList);
     }

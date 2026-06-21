@@ -19,6 +19,13 @@ import uw.gateway.center.helper.AccessLogStatsHelper;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 运营（OPS）仪表盘控制器。
+ * <p>
+ * 提供全局访问统计、分时指标、状态码分布与 Top 排行等仪表盘聚合数据查询，数据来源于 ES 访问日志聚合缓存。
+ *
+ * @author axeon
+ */
 @RestController
 @RequestMapping("/ops/home/dashboard")
 @Tag(name = "仪表盘", description = "仪表盘")

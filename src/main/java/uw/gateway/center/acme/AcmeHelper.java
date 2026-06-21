@@ -554,8 +554,18 @@ public class AcmeHelper {
         slog.log("获取证书开始。certId=" + certId);
         //  获取证书。
         var mscAcmeCertResponse = dao.load(MscAcmeCert.class, certId);
-        if (mscAcmeCertResponse.isNotSuccess()) {
-            slog.log("获取域名证书失败！" + mscAcmeCertResponse.getMsg());
+        if (mscAcmeCertResponse.isNotSuccess() || mscAcmeCertResponse.getData() == null) {
+            // 加载失败时直接构造失败日志返回，避免后续 mscAcmeCert.getDomainName() NPE。
+            MscAcmeDeployLog failedLog = new MscAcmeDeployLog();
+            failedLog.setId(dao.getSequenceId(MscAcmeDeployLog.class));
+            failedLog.setDeployId(deployId);
+            failedLog.setCertId(certId);
+            failedLog.setState(CommonState.DISABLED.getValue());
+            failedLog.setDeployInfo("证书部署失败！certId=" + certId);
+            failedLog.setDeployLog(slog + "获取域名证书失败！" + (mscAcmeCertResponse.isNotSuccess() ? mscAcmeCertResponse.getMsg() : "data为空"));
+            failedLog.setDeployDate(SystemClock.nowDate());
+            dao.save(failedLog);
+            return ResponseData.error(failedLog);
         }
         MscAcmeCert mscAcmeCert = mscAcmeCertResponse.getData();
         slog.log("获取域名[" + mscAcmeCert.getDomainName() + "]证书信息成功！");
@@ -566,10 +576,22 @@ public class AcmeHelper {
             slog.log("证书过期时间：" + DateUtils.dateToString(mscAcmeCert.getExpireDate(), DateUtils.DATE_TIME) + "\n");
         }
         // 获取部署数据。
-        slog.log("获取部署配置开始。deployId=" + certId);
+        slog.log("获取部署配置开始。deployId=" + deployId);
         var mscAcmeDeployResponse = dao.load(MscAcmeDeploy.class, deployId);
-        if (mscAcmeDeployResponse.isNotSuccess()) {
-            slog.log("获取部署配置失败！" + mscAcmeDeployResponse.getMsg());
+        if (mscAcmeDeployResponse.isNotSuccess() || mscAcmeDeployResponse.getData() == null) {
+            // 同上，加载失败直接构造失败日志返回，避免 mscAcmeDeploy.getDeployName() NPE。
+            MscAcmeDeployLog failedLog = new MscAcmeDeployLog();
+            failedLog.setId(dao.getSequenceId(MscAcmeDeployLog.class));
+            failedLog.setSaasId(mscAcmeCert.getSaasId());
+            failedLog.setDomainId(mscAcmeCert.getDomainId());
+            failedLog.setCertId(certId);
+            failedLog.setDeployId(deployId);
+            failedLog.setState(CommonState.DISABLED.getValue());
+            failedLog.setDeployInfo("域名[" + mscAcmeCert.getDomainName() + "]证书部署失败！");
+            failedLog.setDeployLog(slog + "获取部署配置失败！" + (mscAcmeDeployResponse.isNotSuccess() ? mscAcmeDeployResponse.getMsg() : "data为空"));
+            failedLog.setDeployDate(SystemClock.nowDate());
+            dao.save(failedLog);
+            return ResponseData.error(failedLog);
         }
         MscAcmeDeploy mscAcmeDeploy = mscAcmeDeployResponse.getData();
         slog.log("获取部署配置[" + mscAcmeDeploy.getDeployName() + "]成功！");

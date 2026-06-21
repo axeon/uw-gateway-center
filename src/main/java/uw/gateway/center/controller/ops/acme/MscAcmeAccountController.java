@@ -74,7 +74,12 @@ public class MscAcmeAccountController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public ResponseData<MscAcmeAccount> load(@Parameter(description = "主键ID", required = true) @RequestParam long id) {
         AuthServiceHelper.logRef(MscAcmeAccount.class, id);
-        return dao.queryForObject(MscAcmeAccount.class, new AuthIdQueryParam(id));
+        return dao.queryForObject(MscAcmeAccount.class, new AuthIdQueryParam(id)).onSuccess(mscAcmeAccount -> {
+            // 脱敏：账号私钥与EAB密钥不在load接口回显，避免明文泄露。
+            // update方法对空密钥做"不覆盖"处理，故前端编辑时不传密钥即保留原值。
+            mscAcmeAccount.setAccountCertKey(null);
+            mscAcmeAccount.setEabKey(null);
+        });
     }
 
     /**
@@ -146,7 +151,10 @@ public class MscAcmeAccountController {
             mscAcmeAccountDb.setAccountName(mscAcmeAccount.getAccountName());
             mscAcmeAccountDb.setAccountDesc(mscAcmeAccount.getAccountDesc());
             mscAcmeAccountDb.setEabId(mscAcmeAccount.getEabId());
-            mscAcmeAccountDb.setEabKey(mscAcmeAccount.getEabKey());
+            // EAB密钥脱敏：load不回显，前端不改时传null，此处保留原值，避免被覆盖成null。
+            if (mscAcmeAccount.getEabKey() != null) {
+                mscAcmeAccountDb.setEabKey(mscAcmeAccount.getEabKey());
+            }
             mscAcmeAccountDb.setModifyDate(SystemClock.nowDate());
             return dao.update(mscAcmeAccountDb).onSuccess(updatedEntity -> {
                 //保存历史记录

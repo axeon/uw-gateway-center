@@ -34,6 +34,11 @@ public class AcmeDeployCertRunner extends TaskRunner<AcmeDeployCertRunner.Deploy
         DeployParam deployParam = taskData.getTaskParam();
         ResponseData<MscAcmeDeployLog> responseData = AcmeHelper.deployCert(deployParam.getDeployId(), deployParam.getCertId());
         MscAcmeDeployLog deployLog = responseData.getData();
+        // 失败时 data 可能为 null，不能访问 getDeployInfo()，直接通知并抛 TaskPartnerException 触发重试。
+        if (deployLog == null) {
+            DingSendService.sendNotify("证书部署失败！", "### 证书部署失败！\ndeployId=" + deployParam.getDeployId() + ",certId=" + deployParam.getCertId() + "\nmsg=" + responseData.getMsg());
+            throw new TaskPartnerException("部署证书失败！data为空，msg=" + responseData.getMsg());
+        }
 
         String title = deployLog.getDeployInfo();
         StringBuilder sb = new StringBuilder();

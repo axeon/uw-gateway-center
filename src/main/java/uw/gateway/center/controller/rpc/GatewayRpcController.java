@@ -46,13 +46,13 @@ public class GatewayRpcController {
     @Operation(summary = "获取IP过滤器列表", description = "获取IP过滤器列表")
     @MscPermDeclare(user = UserType.RPC)
     public ResponseData<List<MscAclFilterInfo>> getAclFilterList(long saasId) {
-        return dao.list(MscAclFilter.class, "SELECT id,user_type,user_id,filter_type,filter_name from msc_acl_filter where saas_id=? and state=? and audit_state=? order by user_type desc,user_id desc",
+        return dao.list(MscAclFilter.class, "SELECT id,saas_id,user_type,user_id,filter_type,filter_name from msc_acl_filter where saas_id=? and state=? and audit_state=? order by user_type desc,user_id desc",
                 new Object[]{saasId, CommonState.ENABLED.getValue(), AclAuditState.CONFIRM.getValue()}).onSuccess(filterList -> {
             if (filterList.size() == 0) {
                 return ResponseData.success(List.of());
             }
             String filterIds = filterList.stream().map(x -> String.valueOf(x.getId())).collect(Collectors.joining(","));
-            return dao.list(MscAclFilterData.class, "SELECT filter_id,ip_start,ip_end from msc_acl_filter_data where filter_id in (" + filterIds + ") and state=? and audit_state=? order by ip_start asc",
+            return dao.list(MscAclFilterData.class, "SELECT filter_id,ip_info,ip_start,ip_end from msc_acl_filter_data where filter_id in (" + filterIds + ") and state=? and audit_state=? order by ip_start asc",
                     new Object[]{CommonState.ENABLED.getValue(), AclAuditState.CONFIRM.getValue()}).onSuccess(dataList -> {
                 List<MscAclFilterInfo> filterInfoList = new ArrayList<>(filterList.size());
                 for (MscAclFilter aclFilter : filterList) {
@@ -72,7 +72,7 @@ public class GatewayRpcController {
     @Operation(summary = "获取流控列表", description = "获取流控列表")
     @MscPermDeclare(user = UserType.RPC)
     public ResponseData<List<MscAclRateInfo>> getAclRateList(long saasId) {
-        return dao.list(MscAclRate.class, "SELECT id,user_type,user_id,limit_name,limit_type,limit_uri,limit_seconds,limit_requests,limit_bytes from msc_acl_rate where saas_id=? and state=? and audit_state=? order by limit_type desc, saas_level desc, user_type desc, user_id desc",
+        return dao.list(MscAclRate.class, "SELECT id,saas_level,saas_id,user_type,user_id,limit_name,limit_type,limit_uri,limit_seconds,limit_requests,limit_bytes from msc_acl_rate where saas_id=? and state=? and audit_state=? order by limit_type desc, saas_level desc, user_type desc, user_id desc",
                 new Object[]{saasId, CommonState.ENABLED.getValue(), AclAuditState.CONFIRM.getValue()}).onSuccess(rateList -> {
             List<MscAclRateInfo> rateInfoList = new ArrayList<>(rateList.size());
             for (MscAclRate aclRate : rateList) {

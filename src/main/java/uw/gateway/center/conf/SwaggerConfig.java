@@ -30,6 +30,11 @@ public class SwaggerConfig {
     @Value("${project.version}")
     private String appVersion;
 
+    /**
+     * 定制 OpenAPI 文档：注入 Token Bearer 鉴权方案与文档基础信息（标题/版本/联系人）。
+     *
+     * @return OpenAPI 定制器
+     */
     @Bean
     public OpenApiCustomizer customOpenAPI() {
         return openApi -> openApi

@@ -39,6 +39,12 @@ public enum AclAuditState {
         this.label = label;
     }
 
+    /**
+     * 根据数值反查审批状态枚举。
+     *
+     * @param value 审批状态数值
+     * @return 匹配的枚举常量；未命中返回 {@code null}
+     */
     public static AclAuditState findByValue(int value) {
         for (AclAuditState e : AclAuditState.values()) {
             if (value == e.value) {

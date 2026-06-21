@@ -75,7 +75,10 @@ public class MscAcmeDomainController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public ResponseData<MscAcmeDomain> load(@Parameter(description = "主键ID", required = true) @RequestParam long id) {
         AuthServiceHelper.logRef(MscAcmeDomain.class, id);
-        return dao.queryForObject(MscAcmeDomain.class, new AuthIdQueryParam(id));
+        // 脱敏：域名证书私钥不在load接口回显，避免明文泄露。update方法不覆盖domainCertKey，故无副作用。
+        return dao.queryForObject(MscAcmeDomain.class, new AuthIdQueryParam(id)).onSuccess(mscAcmeDomain -> {
+            mscAcmeDomain.setDomainCertKey(null);
+        });
     }
 
     /**

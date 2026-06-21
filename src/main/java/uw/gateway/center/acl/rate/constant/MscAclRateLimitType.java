@@ -90,4 +90,34 @@ public enum MscAclRateLimitType {
         }
         return NONE;
     }
+
+    /**
+     * 严格判断 value 是否为合法的限速类型值。
+     * <p>
+     * 与 {@link #findByValue(int)} 的区别：后者对非法值会回退为 {@link #NONE}，无法区分"真的传 NONE"与"传了非法值"；
+     * 本方法用于参数校验场景，只有 value 命中某个枚举常量才返回 true。
+     *
+     * @param value 待校验的限速类型值
+     * @return true=合法，false=非法
+     */
+    public static boolean isValidValue(int value) {
+        for (MscAclRateLimitType target : MscAclRateLimitType.values()) {
+            if (value == target.value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断本限速类型是否需要按用户维度（userType/userId）限速。
+     * <p>
+     * {@link #USER_TYPE}、{@link #USER_ID}、{@link #USER_TYPE_URI}、{@link #USER_ID_URI} 这四种类型
+     * 要求调用方提供 userType/userId；其余类型不依赖用户维度。
+     *
+     * @return true=需要按用户维度限速
+     */
+    public boolean isUserDimension() {
+        return this == USER_TYPE || this == USER_ID || this == USER_TYPE_URI || this == USER_ID_URI;
+    }
 }

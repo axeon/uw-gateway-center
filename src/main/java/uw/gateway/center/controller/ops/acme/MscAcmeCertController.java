@@ -71,7 +71,10 @@ public class MscAcmeCertController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public ResponseData<MscAcmeCert> load(@Parameter(description = "主键ID", required = true) @RequestParam long id) {
         AuthServiceHelper.logRef(MscAcmeCert.class, id);
-        return dao.queryForObject(MscAcmeCert.class, new AuthIdQueryParam(id));
+        // 脱敏：证书私钥不在load接口回显，避免明文泄露。证书无update接口，故无副作用。
+        return dao.queryForObject(MscAcmeCert.class, new AuthIdQueryParam(id)).onSuccess(mscAcmeCert -> {
+            mscAcmeCert.setCertKey(null);
+        });
     }
 
     /**

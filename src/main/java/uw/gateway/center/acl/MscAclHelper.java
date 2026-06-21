@@ -397,24 +397,30 @@ public class MscAclHelper {
         if (filterList == null || filterList.isEmpty()) {
             return null;
         }
-        //优先级匹配。
+        //优先级匹配。按列表顺序（服务端已按 user_type desc, user_id desc 排序）先匹配更具体的规则。
+        MscAclFilterInfo defaultFilter = null;
         for (MscAclFilterInfo filterInfo : filterList) {
-            //首先匹配userId
-            if (filterInfo.getUserId() > -1 && filterInfo.getUserId() == userId) {
-                return filterInfo;
+            // 默认规则（userType=-1 且 userId=-1）：先记下，等确认没有更具体的命中后再返回。
+            if (filterInfo.getUserId() == -1L && filterInfo.getUserType() == -1) {
+                if (defaultFilter == null) {
+                    defaultFilter = filterInfo;
+                }
+                continue;
             }
-            //其次匹配userType。
+            // userId 指定的规则：仅当 userId 精确命中时才生效，未命中则跳过（不回退到 userType，避免同 type 其他用户误命中）。
+            if (filterInfo.getUserId() > -1) {
+                if (filterInfo.getUserId() == userId) {
+                    return filterInfo;
+                }
+                continue;
+            }
+            // 仅 userType 指定的规则：userType 命中即生效。
             if (filterInfo.getUserType() > -1 && filterInfo.getUserType() == userType) {
                 return filterInfo;
             }
         }
-        //最后确认默认值
-        MscAclFilterInfo filterInfo = filterList.getLast();
-        if (filterInfo.getUserId() == -1L && filterInfo.getUserType() == -1) {
-            return filterInfo;
-        } else {
-            return null;
-        }
+        // 没有具体规则命中时，返回默认规则（可能为 null）。
+        return defaultFilter;
     }
 
     /**

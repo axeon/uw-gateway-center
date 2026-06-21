@@ -42,6 +42,13 @@ public enum AcmeVendor {
         return uri;
     }
 
+    /**
+     * 根据 code 反查 ACME 服务商枚举。
+     *
+     * @param code 服务商代码
+     * @return 匹配的枚举常量
+     * @throws IllegalArgumentException code 未命中任何枚举常量
+     */
     public static AcmeVendor valueOfCode(String code) {
         for (AcmeVendor vendor : values()) {
             if (vendor.code.equals(code)) {

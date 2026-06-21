@@ -34,6 +34,11 @@ public class AcmeOrderCertRunner extends TaskRunner<Long, ResponseData<MscAcmeCe
     public ResponseData<MscAcmeCert> runTask(TaskData<Long, ResponseData<MscAcmeCert>> taskData) throws Exception {
         ResponseData<MscAcmeCert> responseData = AcmeHelper.fetchCert(taskData.getTaskParam());
         MscAcmeCert mscAcmeCert = responseData.getData();
+        // 失败时 data 可能为 null，不能访问 getDomainName()，直接通知并抛 TaskPartnerException 触发重试。
+        if (mscAcmeCert == null) {
+            DingSendService.sendNotify("域名SSL证书更新失败！", "### 域名SSL证书更新失败！\ndomainId=" + taskData.getTaskParam() + "\nmsg=" + responseData.getMsg());
+            throw new TaskPartnerException("证书下单失败！data为空，msg=" + responseData.getMsg());
+        }
         String title = "域名[" + mscAcmeCert.getDomainName() + "]SSL证书更新" + (responseData.isSuccess() ? "成功！" : "失败!");
         StringBuilder sb = new StringBuilder();
         sb.append("### ").append(title).append("\n");

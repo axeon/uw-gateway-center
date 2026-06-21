@@ -159,12 +159,15 @@ public class MscAclRateController {
     @MscPermDeclare(user = UserType.ADMIN, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAclRate.class, id, remark);
-        MscAclRate mscAclRate = new MscAclRate();
-        mscAclRate.setModifyDate(SystemClock.nowDate());
-        mscAclRate.setState(CommonState.ENABLED.getValue());
-        return dao.update(mscAclRate, new IdStateQueryParam(id, CommonState.DISABLED.getValue())).onSuccess(updateResponse -> {
-            //更新缓存
-            MscAclHelper.invalidateAclRateCache(mscAclRate.getSaasId());
+        // 先load拿到真实saasId，再用空实体update，按真实saasId失效缓存（避免空实体getSaasId()=0失效错误的桶）。
+        return dao.load(MscAclRate.class, id).onSuccess(loaded -> {
+            MscAclRate mscAclRate = new MscAclRate();
+            mscAclRate.setModifyDate(SystemClock.nowDate());
+            mscAclRate.setState(CommonState.ENABLED.getValue());
+            return dao.update(mscAclRate, new IdStateQueryParam(id, CommonState.DISABLED.getValue())).onSuccess(updateResponse -> {
+                //更新缓存
+                MscAclHelper.invalidateAclRateCache(loaded.getSaasId());
+            });
         });
     }
 
@@ -179,12 +182,14 @@ public class MscAclRateController {
     public ResponseData disable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAclRate.class, id, remark);
         AuthServiceHelper.logInfo(MscAclRate.class, id, remark);
-        MscAclRate mscAclRate = new MscAclRate();
-        mscAclRate.setModifyDate(SystemClock.nowDate());
-        mscAclRate.setState(CommonState.DISABLED.getValue());
-        return dao.update(mscAclRate, new IdStateQueryParam(id, CommonState.ENABLED.getValue())).onSuccess(updateResponse -> {
-            //更新缓存
-            MscAclHelper.invalidateAclRateCache(mscAclRate.getSaasId());
+        return dao.load(MscAclRate.class, id).onSuccess(loaded -> {
+            MscAclRate mscAclRate = new MscAclRate();
+            mscAclRate.setModifyDate(SystemClock.nowDate());
+            mscAclRate.setState(CommonState.DISABLED.getValue());
+            return dao.update(mscAclRate, new IdStateQueryParam(id, CommonState.ENABLED.getValue())).onSuccess(updateResponse -> {
+                //更新缓存
+                MscAclHelper.invalidateAclRateCache(loaded.getSaasId());
+            });
         });
 
     }
@@ -199,10 +204,15 @@ public class MscAclRateController {
     @MscPermDeclare(user = UserType.ADMIN, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData delete(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(MscAclRate.class, id, remark);
-        MscAclRate mscAclRate = new MscAclRate();
-        mscAclRate.setModifyDate(SystemClock.nowDate());
-        mscAclRate.setState(CommonState.DELETED.getValue());
-        return dao.update(mscAclRate, new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
+        return dao.load(MscAclRate.class, id).onSuccess(loaded -> {
+            MscAclRate mscAclRate = new MscAclRate();
+            mscAclRate.setModifyDate(SystemClock.nowDate());
+            mscAclRate.setState(CommonState.DELETED.getValue());
+            return dao.update(mscAclRate, new IdStateQueryParam(id, CommonState.DISABLED.getValue())).onSuccess(updateResponse -> {
+                //删除后也需失效缓存，否则24h TTL内旧规则仍生效
+                MscAclHelper.invalidateAclRateCache(loaded.getSaasId());
+            });
+        });
 
     }
 
